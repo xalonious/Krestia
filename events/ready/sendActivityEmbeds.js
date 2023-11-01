@@ -1,7 +1,7 @@
 const { EmbedBuilder } = require("discord.js");
 const schedule = require('node-schedule');
 const now = new Date();
-const staffSchema = require("../../schemas/testSchema");
+const staffSchema = require("../../schemas/staffMember");
 
 module.exports = async (client) => {
   const rule = new schedule.RecurrenceRule();
