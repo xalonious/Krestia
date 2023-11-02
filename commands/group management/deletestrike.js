@@ -1,4 +1,4 @@
-const { ApplicationCommandOptionType, EmbedBuilder, PermissionsBitField } = require("discord.js");
+const { ApplicationCommandOptionType, PermissionsBitField } = require("discord.js");
 const staffSchema = require('../../schemas/staffMember');
 
 module.exports = {

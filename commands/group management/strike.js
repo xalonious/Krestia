@@ -1,10 +1,9 @@
-const { ApplicationCommandOptionType, EmbedBuilder, PermissionsBitField } = require("discord.js");
+const { ApplicationCommandOptionType } = require("discord.js");
 const staffSchema = require('../../schemas/staffMember');
 
 module.exports = {
     name: "strike",
     description: "strikes a staff member",
-    permissionsRequired: [PermissionsBitField.Flags.ManageRoles],
     options: [
         {
             name: "user",
@@ -22,8 +21,8 @@ module.exports = {
 
     run: async (client, interaction) => {
         await interaction.deferReply();
-        
-		const roleIdsToCheck = ["1089485004654006272", "1089484325931720734"];
+
+                const roleIdsToCheck = ["1089485004654006272", "1089484325931720734"];
 
         const isShr = interaction.member.roles.cache.some(role => roleIdsToCheck.includes(role.id));
 
@@ -49,7 +48,7 @@ module.exports = {
         await staffSchema.updateOne({ userid: staffMember.id }, { $push: { strikes: strike } });
 
         interaction.editReply(`Successfully striked ${staffDocument.robloxuser} for: ${reason}`);
-        
+
         const userToNotify = await client.users.fetch(staffMember.id);
         userToNotify.send(`⚠️ | You have been striked for: ${reason}`);
     },

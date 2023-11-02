@@ -1,10 +1,9 @@
-const { ApplicationCommandOptionType, EmbedBuilder, PermissionsBitField } = require("discord.js");
+const { ApplicationCommandOptionType, EmbedBuilder } = require("discord.js");
 const staffSchema = require('../../schemas/staffMember');
 
 module.exports = {
     name: "viewstrikes", 
     description: "Displays strikes for a user",
-    permissionsRequired: [PermissionsBitField.Flags.ManageMessages],
     options: [
         {
             name: "user",
