@@ -32,7 +32,6 @@ module.exports = {
                 content: "You cannot ban someone with a role that is equal to or higher than yours.",
                 ephemeral: true
             })
-            try {
                 const bannedloser = new EmbedBuilder()
                 .setTitle(`You were banned from ${interaction.guild.name}`)
                 .addFields(
@@ -41,18 +40,23 @@ module.exports = {
                 )
                 .setColor([255, 0, 0])
                 .setThumbnail(interaction.guild.iconURL())
-                target.send({ embeds: [bannedloser]})
+
+                    let confirmationMessage = `Succesfully banned ${target.user.tag}`
+
+            try {
+                await target.send({ embeds: [bannedloser]})
+            } catch(error) {
+                confirmationMessage = `Succesfully banned ${target.user.tag}, I was unable to notify them.`
+            }
+
+                
               setTimeout(() => {
                  target.ban({
                     reason: reason
-                }).then((memb) => interaction.reply(`Succesfully banned ${target.user.tag}`))
+                }).then(() => interaction.reply(confirmationMessage))
               }, 1000)
                 
-            } catch(error) {
-            interaction.reply("unable to ban that user, make sure my highest role is above theirs")
-            console.log(error)
-            return;
-            }
+
 
             const logEmbed = new EmbedBuilder()
             .setTitle("User banned")
