@@ -20,42 +20,28 @@ module.exports = async (client, oldMember, newMember) => {
 
     const userRecord = await staffSchema.findOne({ userid: memberID });
     if (userRecord) {
+        const { cache: oldCache } = oldRoles;
+        const { cache: newCache } = newRoles;
         const robloxUsername = userRecord.robloxuser;
 
-        const wasStaffMember = (
-            oldRoles.cache.has(middleRankRole) ||
-            oldRoles.cache.has(highRankRole) ||
-            oldRoles.cache.has(seniorHighRankRole) ||
-            oldRoles.cache.has(leadershipTeamRole)
-        );
-
-        const isNotStaffMember = (
-            !newRoles.cache.has(middleRankRole) &&
-            !newRoles.cache.has(highRankRole) &&
-            !newRoles.cache.has(seniorHighRankRole) &&
-            !newRoles.cache.has(leadershipTeamRole)
-        );
+        const wasStaffMember = [middleRankRole, highRankRole, seniorHighRankRole, leadershipTeamRole].some(role => oldCache.has(role));
+        const isNotStaffMember = [middleRankRole, highRankRole, seniorHighRankRole, leadershipTeamRole].every(role => !newCache.has(role));
 
         if (wasStaffMember && isNotStaffMember) {
             await staffSchema.deleteOne({ userid: memberID });
         }
 
-        if (oldRoles.cache.has(middleRankRole) && (
-            newRoles.cache.has(highRankRole) ||
-            newRoles.cache.has(seniorHighRankRole) ||
-            newRoles.cache.has(leadershipTeamRole)
-        )) {
-            if (await isRankAbove75(robloxUsername)) {
-                await staffSchema.updateOne({ userid: memberID }, { hasRankPerms: true });
-            }
-        }
-
-        if (
-            (oldRoles.cache.has(highRankRole) || oldRoles.cache.has(seniorHighRankRole) || oldRoles.cache.has(leadershipTeamRole)) &&
-            newRoles.cache.has(middleRankRole)
-        ) {
-            await staffSchema.updateOne({ userid: memberID }, { hasRankPerms: false });
+        switch (true) {
+            case newCache.has(highRankRole):
+            case newCache.has(seniorHighRankRole):
+            case newCache.has(leadershipTeamRole):
+                if (await isRankAbove75(robloxUsername)) {
+                    await staffSchema.updateOne({ userid: memberID }, { hasRankPerms: true });
+                }
+                break;
+            case newCache.has(middleRankRole):
+                await staffSchema.updateOne({ userid: memberID }, { hasRankPerms: false });
+                break;
         }
     }
 };
-
