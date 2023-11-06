@@ -1,5 +1,6 @@
 const { ApplicationCommandOptionType } = require("discord.js");
 const staffSchema = require('../../schemas/staffMember');
+const generateToken = require("../../utils/generateToken");
 
 module.exports = {
     name: "strike",
@@ -39,8 +40,15 @@ module.exports = {
             return interaction.editReply(`The specified user is not in the staff database.`);
         }
 
+        let strikeId = generateToken();
+        let strikeExists = await staffSchema.findOne({ "strikes.strikeId": strikeId });
+        while (strikeExists) {
+          strikeId = generateToken();
+          strikeExists = await staffSchema.findOne({ "strikes.strikeId": strikeId });
+        }
+
         const strike = {
-            strikeId: generateToken(),
+            strikeId: strikeId,
             amount: staffDocument.strikes ? staffDocument.strikes.length + 1 : 1,
             reason: reason,
         };
@@ -54,11 +62,3 @@ module.exports = {
     },
 };
 
-function generateToken() {
-    const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
-    let result = '';
-    for (let i = 0; i < 11; i++) {
-        result += chars[Math.floor(Math.random() * chars.length)];
-    }
-    return result;
-}

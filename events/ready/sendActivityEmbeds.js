@@ -2,6 +2,7 @@ const { EmbedBuilder } = require("discord.js");
 const schedule = require('node-schedule');
 const now = new Date();
 const staffSchema = require("../../schemas/staffMember");
+const generateToken = require("../../utils/generateToken");
 
 module.exports = async (client) => {
   const rule = new schedule.RecurrenceRule();
@@ -32,8 +33,14 @@ module.exports = async (client) => {
       const member = await guild.members.fetch(user.userid);
       const hasInactivityRole = member.roles.cache.get(inactivityRole);
       if (!hasInactivityRole) {
+        let strikeId = generateToken();
+        let strikeExists = await staffSchema.findOne({ "strikes.strikeId": strikeId });
+        while (strikeExists) {
+          strikeId = generateToken();
+          strikeExists = await staffSchema.findOne({ "strikes.strikeId": strikeId });
+        }
         const strike = {
-          strikeId: generateToken(),
+          strikeId: strikeId,
           amount: (user.strikes?.length ?? 0) + 1,
           reason: "Failed to meet 50 weekly messages requirement",
         };
@@ -64,7 +71,7 @@ module.exports = async (client) => {
       .setColor("#ff0000");
 
     const inactivityEmbed = new EmbedBuilder()
-      .setTitle("Users currently on inactivity")
+      .setTitle("Users currently exempt")
       .setDescription(`${inactivityUsers.map(user => `<@${user.userid}>`).join("\n") || "None"}`)
       .setColor("#0000ff");
 
@@ -78,15 +85,6 @@ module.exports = async (client) => {
 
     await Promise.all(allStaff.map(user => staffSchema.updateOne({ userid: user.userid }, { $set: { messages: 0 } })));
 
-    console.log("Succesfully sent waakly activity data");
+    console.log("Succesfully sent weekly activity data");
   }
 };
-
-function generateToken() {
-  const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
-  let result = '';
-  for (let i = 0; i < 11; i++) {
-    result += chars[Math.floor(Math.random() * chars.length)];
-  }
-  return result;
-}

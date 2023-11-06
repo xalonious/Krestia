@@ -66,7 +66,7 @@ module.exports = {
     
 
 
-         if(await checkAllowance(runnerID, userId) === false) return interaction.editReply({
+         if(!await checkAllowance(runnerID, userId)) return interaction.editReply({
             content: "Unauthorized rank change: the user you are trying to demote has a role that is equal to or higher than yours.",
          })
         
