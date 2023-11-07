@@ -1,4 +1,4 @@
-const { MessageEmbed } = require("discord.js");
+const { EmbedBuilder } = require("discord.js");
 
 module.exports = async (client, oldMessage, newMessage) => {
   if (oldMessage.author.bot || oldMessage.attachments.size > 0 || oldMessage.content.includes("http")) {
@@ -8,16 +8,16 @@ module.exports = async (client, oldMessage, newMessage) => {
   try {
     const logsChannel = oldMessage.guild.channels.cache.get("1074168201560195082");
 
-    const editedContent = new MessageEmbed()
+    const editedContent = new EmbedBuilder()
       .setTitle("Edited Message")
       .addFields(
-        { name: "Author", value: oldMessage.author },
-        { name: "In", value: oldMessage.channel },
+        { name: "Author", value: `${oldMessage.author}`},
+        { name: "In", value: `${oldMessage.channel}`},
         { name: "Old Message", value: oldMessage.content },
         { name: "New Message", value: newMessage.content }
       )
       .setThumbnail(oldMessage.author.displayAvatarURL({ dynamic: true }))
-      .setColor("RANDOM");
+      .setColor("Random");
 
     await logsChannel.send({ embeds: [editedContent] });
   } catch (error) {
