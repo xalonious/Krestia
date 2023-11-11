@@ -1,26 +1,15 @@
-const { ApplicationCommandOptionType, EmbedBuilder} = require("discord.js");
 const noblox = require("noblox.js")
 const db = require("../../schemas/staffMember")
-const getUserAvatar = require("../../utils/getUserAvatar")
+const axios = require("axios")
 require("dotenv").config()
 
 module.exports = {
     name: "verify",
     description: "Verify your Roblox user to your Discord account, allowing you to use the ranking commands.",
-    options: [
-        {
-            name: "user",
-            description: "Your Roblox username",
-            type: ApplicationCommandOptionType.String,
-            required: true
-        }
-    ],
 
     run: async (client, interaction) => {
         await interaction.deferReply();
 
-        const robloxuser = interaction.options.getString("user");
-        const robloxuserid = await noblox.getIdFromUsername(robloxuser);
         const userid = interaction.user.id;
 
         const alreadyVerified = await db.findOne({ userid: userid });
@@ -31,11 +20,20 @@ module.exports = {
             });
         }
 
-        if (robloxuserid == null) {
+        const bloxlinkResponse = await axios.get(`https://api.blox.link/v4/public/guilds/${interaction.guild.id}/discord-to-roblox/${userid}`, {
+            headers: {
+                Authorization: process.env.BLOXLINK_API_KEY
+            }
+        });
+
+        if (bloxlinkResponse.data.error) {
             return interaction.editReply({
-                content: `${robloxuser} is not a valid Roblox username.`,
+                content: `You are not linked to a Roblox account. Please link your account using Bloxlink before using this command.`
             });
         }
+
+        const robloxuserid = bloxlinkResponse.data.robloxID;
+        const robloxuser = await noblox.getUsernameFromId(robloxuserid);
 
         const rankInGroup = await noblox.getRankInGroup(process.env.GROUP, robloxuserid);
 
@@ -56,75 +54,21 @@ module.exports = {
             });
         }
 
-        const randomEmojis = [
-            "😀", "😃", "😄", "😁", "😆", "😅", "😂", "🤣", "😇", "😉", "😊", "🙂", "🙃", "😋",
-            "😌", "😍", "😜", "🤪", "😝", "😛", "🤑", "🤗", "🤭", "🤫", "🤔", "🙄", "😲", "🤓", "😎"
-        ];
+        let hasRankPerms = rankInGroup >= 75;
 
-        const selectedString = pickRandomEmojis(randomEmojis, 5);
-
-        const avatarImage = await getUserAvatar(robloxuserid);
-
-        let hasRankPerms = rankInGroup >= 75; // Set hasRankPerms based on rankInGroup
-
-        const verifyEmbed = new EmbedBuilder()
-            .setTitle(`Hello ${robloxuser}!`)
-            .setDescription("To verify that you own this account, please put the code below in your Roblox bio.")
-            .addFields({ name: "Your code:", value: `\`${selectedString}\`` })
-            .setColor("Random")
-            .setFooter({ text: "Once the code has been added, say 'done', or anything else to cancel." })
-            .setThumbnail(avatarImage);
-
-        await interaction.editReply({ embeds: [verifyEmbed] });
-
-        const filter = (m) => m.author.id === interaction.user.id;
-        const collector = interaction.channel.createMessageCollector({
-            filter,
-            time: 120000,
+        const newUser = new db({
+            userid: userid,
+            robloxuser: robloxuser,
+            messages: 0,
+            hasRankPerms: hasRankPerms,
+            strikes: []
         });
+        
 
-        collector.on("collect", async (m) => {
-            if (m.content.toLowerCase() === "done") {
-                collector.stop();
-                const playerinfo = await noblox.getPlayerInfo(robloxuserid);
-                const blurb = playerinfo.blurb;
-                if (blurb.includes(selectedString)) {
-                    const newUser = new db({
-                        userid: userid,
-                        robloxuser: robloxuser,
-                        messages: 0,
-                        hasRankPerms: hasRankPerms, // Set hasRankPerms here
-                        strikes: [],
-                    });
-                    await newUser.save();
+        await newUser.save();
 
-                    return interaction.followUp(`You have successfully been verified as ${robloxuser}!`);
-                } else {
-                    return interaction.followUp("Failed to find the code in your Roblox bio, please try again.");
-                }
-            } else {
-                await interaction.followUp("Verification canceled.");
-                collector.stop();
-            }
-        });
+        interaction.editReply(`You have succesfully been verified as ${robloxuser}!`)
 
-        collector.on("end", async (collected) => {
-            if (collected.size === 0) {
-                await interaction.followUp("Verification timed out.");
-            }
-        })
+       
     }
-}
-
-
-function pickRandomEmojis(array, num) {
-  let result = "";
-  const arrayLength = array.length;
-  
-  for (let i = 0; i < num; i++) {
-    const randomIndex = Math.floor(Math.random() * arrayLength);
-    result += array[randomIndex];
-  }
-  
-  return result;
 }

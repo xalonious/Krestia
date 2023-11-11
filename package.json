@@ -9,7 +9,7 @@
   "author": "xander",
   "license": "ISC",
   "dependencies": {
-    "axios": "^1.6.0",
+    "axios": "^1.6.1",
     "discord-gamecord": "^4.4.1",
     "discord.js": "^14.13.0",
     "discord.js-akinator": "^4.1.2",
