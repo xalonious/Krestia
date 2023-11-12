@@ -1,5 +1,6 @@
 const staffSchema = require("../../schemas/staffMember");
 const noblox = require("noblox.js");
+const axios = require("axios")
 require("dotenv").config()
 
 module.exports = async (client, oldMember, newMember) => {
@@ -42,6 +43,34 @@ module.exports = async (client, oldMember, newMember) => {
             case newCache.has(middleRankRole):
                 await staffSchema.updateOne({ userid: memberID }, { hasRankPerms: false });
                 break;
+        }
+    } else {
+        const { cache: oldCache } = oldRoles;
+        const { cache: newCache } = newRoles;
+        const hasStaffRole = [middleRankRole, highRankRole, seniorHighRankRole, leadershipTeamRole].some(role => newCache.has(role));
+        const wasNotStaffMember = [middleRankRole, highRankRole, seniorHighRankRole, leadershipTeamRole].every(role => !oldCache.has(role));
+        if (hasStaffRole && wasNotStaffMember) {
+            const { data } = await axios.get(`https://api.blox.link/v4/public/guilds/${oldMember.guild.id}/discord-to-roblox/${memberID}`, {
+                headers: {
+                    Authorization: process.env.BLOXLINK_API_KEY
+                }
+            });
+            if (data.robloxID) {
+                const robloxUsername = await noblox.getUsernameFromId(data.robloxID);
+                const rankInGroup = await noblox.getRankInGroup(process.env.GROUP, data.robloxID);
+                if (rankInGroup >= 55) {
+                    const hasRankPerms = rankInGroup >= 75;
+                    await staffSchema.create({
+                        userid: memberID,
+                        robloxuser: robloxUsername,
+                        messages: 0,
+                        hasRankPerms,
+                        strikes: []
+                    });
+                }
+            } else {
+                console.log(`User with ID ${memberID} is not linked to Bloxlink.`);
+            }
         }
     }
 };
