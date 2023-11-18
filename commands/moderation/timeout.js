@@ -9,7 +9,7 @@ module.exports = {
         {
             name: "user",
             description: "the user who you want to timeout",
-            type: ApplicationCommandOptionType.Mentionable,
+            type: ApplicationCommandOptionType.User,
             required: true
         },
         {
@@ -28,7 +28,7 @@ module.exports = {
 
     run : async(client, interaction) => {
 
-        const mentionable = interaction.options.getMentionable("user")
+        const mentionable = interaction.options.getUser("user")
         const duration = interaction.options.getString("duration")
         let reason = interaction.options.getString("reason")
         if(!reason) reason = "No reason given"

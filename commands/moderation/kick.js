@@ -8,7 +8,7 @@ module.exports = {
     {
         name: "user",
         description: "the user who you want to kick",
-        type: ApplicationCommandOptionType.Mentionable,
+        type: ApplicationCommandOptionType.User,
         required: true
     },
     {
@@ -22,7 +22,7 @@ module.exports = {
 
         run: async(client, interaction) => {
 
-        const target = interaction.options.getMentionable("user")
+        const target = interaction.options.getUser("user")
 
         let reason = interaction.options.getString("reason")
         if(!reason) reason = "No reason given"

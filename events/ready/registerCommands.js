@@ -23,7 +23,7 @@ module.exports = async (client) => {
           if(areCommandsDifferent(existingCommand, localCommand)) {
             await applicationCommands.edit(existingCommand.id, {
                 description,
-                options: options ? null : []
+                options: options || []
             })
 
             console.log(`🔀  | Edited command ${name}`)

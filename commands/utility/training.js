@@ -7,7 +7,7 @@ module.exports = {
         {
             name: "co-host",
             description: "the co-host of the training",
-            type: ApplicationCommandOptionType.Mentionable,
+            type: ApplicationCommandOptionType.User,
             required: false
         }
     ],
@@ -21,7 +21,7 @@ module.exports = {
 
         const trainingChannel = interaction.guild.channels.cache.get("1076683229001682954")
 
-        const cohost = interaction.options.getMentionable("co-host") || "N/A"
+        const cohost = interaction.options.getUser("co-host") || "N/A"
         const trainingEmbed = new EmbedBuilder()
         .setTitle("Krestia Training")
         .setDescription(`A training will be commencing soon, head on down to the training centre for a chance to rank up! \n \n Host: ${interaction.member} \n Co-host: ${cohost} \n \n **Game Link:** https://www.roblox.com/games/14555601476/NEW-Training-Center`)
