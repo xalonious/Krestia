@@ -16,19 +16,17 @@ module.exports = {
     run: async (client, interaction) => {
         await interaction.deferReply();
         
-         const roleIdsToCheck = ["1089485004654006272", "1089484325931720734"];
-
-        const isShr = interaction.member.roles.cache.some(role => roleIdsToCheck.includes(role.id));
-
-        if (!isShr) {
-            return interaction.editReply("Only SHRs can use this command");
-        }
-
+        const roleIdsToCheck = ["1089485004654006272", "1089484325931720734"];
         const user = interaction.options.getUser("user");
         const userId = user.id;
 
+        const isShr = interaction.member.roles.cache.some(role => roleIdsToCheck.includes(role.id));
+
+        if (!isShr && interaction.user.id !== userId) {
+            return interaction.editReply("Only SHRs or the user themselves can use this command");
+        }
+
         const staffMember = await staffSchema.findOne({ userid: userId });
-        
         if(!staffMember) return interaction.editReply("That user is not a staff member.")
         
         if (staffMember.strikes.length == 0) {
