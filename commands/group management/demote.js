@@ -45,10 +45,6 @@ module.exports = {
             let currentRank = await noblox.getRankNameInGroup(group, userId)
             
 
-            
-
-
-    
 
             
 
@@ -63,6 +59,13 @@ module.exports = {
                 content: "The specified roblox user is not in the group.",
             })
         }
+
+        if(isMember == 1) {
+            return interaction.editReply({
+                content: "That user is a customer, I can't demote them.",
+            })
+        }
+        
     
 
 

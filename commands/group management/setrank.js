@@ -8,6 +8,32 @@ const getRobloxUser = require("../../utils/getRobloxUser")
 const { EmbedBuilder, ApplicationCommandOptionType } = require("discord.js")
 
 
+const rankChoices = [
+    { name: "Customer", value: "Customer" },
+    { name: "Business Partner", value: "[B] Business Partner" },
+    { name: "Noted Customer", value: "[N] Noted Customer" },
+    { name: "Awaiting Training", value: "[L] Awaiting Training" },
+    { name: "Cashier", value: "[L] Cashier" },
+    { name: "Wait Staff", value: "[L] Wait Staff" },
+    { name: "Head Wait Staff", value: "[L] Head Wait Staff" },
+    { name: "Chef", value: "[L] Chef" },
+    { name: "Staff Assistant", value: "[M] Staff Assistant" },
+    { name: "Shift Leader", value: "[M] Shift Leader" },
+    { name: "Shift Supervisor", value: "[M] Shift Supervisor" },
+    { name: "Advisor", value: "[M] Advisor" },
+    { name: "Assistant Manager", value: "[H] Assistant Manager" },
+    { name: "General Manager", value: "[H] General Manager" },
+    { name: "Executive Assistant", value: "[H] Executive Assistant" },
+    { name: "Executive Director", value: "[H] Executive Director" },
+    { name: "Executive Head", value: "[S] Executive Head" },
+    { name: "Board of Directors", value: "[S] Board Of Directors" },
+    { name: "Corporate", value: "[S] Corporate" },
+    { name: "Developer", value: "[D] Developer" }
+];
+
+
+
+
 module.exports = {
     name: "setrank",
     description: "sets the rank of a user in the group",
@@ -23,7 +49,8 @@ module.exports = {
             name: "rank",
             description: "the rank to update the user to",
             type: ApplicationCommandOptionType.String,
-            required: true
+            required: true,
+            choices: rankChoices
         }
     ],
 
@@ -51,10 +78,6 @@ module.exports = {
             
 
 
-            
-
-           
-
             const isMember = await noblox.getRankInGroup(group, userId)
         
 
@@ -69,46 +92,17 @@ module.exports = {
         const runnerRank = await noblox.getRankInGroup(group, runnerID)
 
 
-        const rank = interaction.options.getString("rank").toLowerCase()
-
-
-        const rankMap = {
-            "customer": "Customer",
-            "business partner": "[B] Business Partner",
-            "noted customer": "[N] Noted Customer",
-            "awaiting training": "[L] Awaiting Training",
-            "cashier": "[L] Cashier",
-            "wait staff": "[L] Wait Staff",
-            "head wait staff": "[L] Head Wait Staff",
-            "chef": "[L] Chef",
-            "staff assistant": "[M] Staff Assistant",
-            "shift leader": "[M] Shift Leader",
-            "shift supervisor": "[M] Shift Supervisor",
-            "advisor": "[M] Advisor",
-            "assistant manager": "[H] Assistant Manager",
-            "general manager": "[H] General Manager",
-            "executive assistant": "[H] Executive Assistant",
-            "exexutive director": "[H] Executive Director",
-            "executive head": "[S] Executive Head",
-            "board of directors": "[S] Board Of Directors",
-            "corporate": "[S] Corporate",
-            "developer": "[D] Developer"
-          };
-          
-          const fullRank = rankMap[rank] || "Invalid Rank";
+        const rank = interaction.options.getString("rank")
         
-          if(fullRank == currentRank) return interaction.editReply(`${username} already has the rank ${currentRank}`)
+          if(rank == currentRank) return interaction.editReply(`${username} already has the rank ${currentRank}`)
 
-          if(fullRank == "Invalid Rank") return interaction.editReply({
-            content: "Please provide a valid rank",
-          })
 
 
           if(!await checkAllowance(runnerID, userId)) return interaction.editReply({
             content: "Unauthorized rank change: the user you are trying to demote has a role that is equal to or higher than yours.",
          })
 
-        const roleToUpdateTo = await noblox.getRole(group, fullRank);
+        const roleToUpdateTo = await noblox.getRole(group, rank);
 
         if(runnerRank <= roleToUpdateTo.rank) return interaction.editReply({
          content: "Unauthorized operation: the role you are trying to update to is equal to or above your own.",
@@ -116,7 +110,7 @@ module.exports = {
 
 
         try {
-            await noblox.setRank(group, userId, fullRank)
+            await noblox.setRank(group, userId, rank)
             let newRank = await noblox.getRankNameInGroup(group, userId)
             const newRankName = extractRankName(newRank)
          interaction.editReply(`Succesfully set the rank of ${username} to **${newRankName}**!`)
