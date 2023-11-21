@@ -39,7 +39,7 @@ module.exports = {
             {name: "New shout", value: shout},
             {name: "Responsible user", value: runnerUser}
         )
-        .setColor([0, 0, 255])
+        .setColor("Blue")
         .setThumbnail(interaction.guild.iconURL())
 
         const logschan = interaction.guild.channels.cache.get(process.env.LOGSCHAN) 

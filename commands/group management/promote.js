@@ -68,7 +68,7 @@ module.exports = {
         if(runnerUser == username) return interaction.editReply("if only it was that easy lol")
         
         if(!await checkAllowance(runnerID, userId)) return interaction.editReply({
-            content: "Unauthorized rank change: the user you are trying to demote has a role that is equal to or higher than yours.",
+            content: "Unauthorized rank change: the user you are trying to demote has a role that is equal to or above your own.",
          })
         
         
@@ -105,7 +105,7 @@ module.exports = {
                 {name: "Responsible user", value: runnerUser}
             )
             
-            .setColor([0, 255, 0])
+            .setColor("Green")
             .setThumbnail(embedimage)
 
             const logschan = interaction.guild.channels.cache.get(process.env.LOGSCHAN) 

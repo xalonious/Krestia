@@ -70,7 +70,7 @@ module.exports = {
 
 
          if(!await checkAllowance(runnerID, userId)) return interaction.editReply({
-            content: "Unauthorized rank change: the user you are trying to demote has a role that is equal to or higher than yours.",
+            content: "Unauthorized rank change: the user you are trying to demote has a role that is equal to or above your own.",
          })
         
                     if((currentRank == "[P] Vice-President") || (currentRank == "[P] President") || (currentRank == "[P] Presidential Assistant")) return interaction.editReply("Their rank is the same as or above mine, I can't do that")
@@ -106,7 +106,7 @@ module.exports = {
                 {name: "Responsible user", value: runnerUser}
             )
             
-            .setColor([255, 0, 0])
+            .setColor("Red")
             .setThumbnail(embedimage)
 
             const logschan = interaction.guild.channels.cache.get(process.env.LOGSCHAN) 

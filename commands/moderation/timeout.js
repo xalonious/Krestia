@@ -79,7 +79,7 @@ module.exports = {
             {name: "Reason", value: reason},
             {name: "Responsible moderator", value: `${interaction.member}`}
         )
-        .setColor([255, 0, 0])
+        .setColor("Red")
         .setThumbnail(mentionable.user.displayAvatarURL())
 
         const logschan = interaction.guild.channels.cache.get(process.env.LOGSCHAN) 

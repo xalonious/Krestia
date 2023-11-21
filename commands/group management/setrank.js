@@ -99,13 +99,13 @@ module.exports = {
 
 
           if(!await checkAllowance(runnerID, userId)) return interaction.editReply({
-            content: "Unauthorized rank change: the user you are trying to demote has a role that is equal to or higher than yours.",
+            content: "Unauthorized rank change: the user you are trying to demote has a role that is equal to or above your own.",
          })
 
         const roleToUpdateTo = await noblox.getRole(group, rank);
 
         if(runnerRank <= roleToUpdateTo.rank) return interaction.editReply({
-         content: "Unauthorized operation: the role you are trying to update to is equal to or above your own.",
+         content: "Unauthorized rank change: the role you are trying to update to is equal to or above your own.",
         })
 
 
@@ -137,7 +137,7 @@ module.exports = {
             {name: "New rank", value: newRank},
             {name: "Responsible user", value: runnerUser}
          )
-         .setColor([0, 0, 255])
+         .setColor("Blue")
          .setThumbnail(embedimage)
 
          const logschan = interaction.guild.channels.cache.get(process.env.LOGSCHAN) 
