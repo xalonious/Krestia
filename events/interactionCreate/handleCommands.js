@@ -20,12 +20,6 @@ module.exports = async (client, interaction) => {
 
     if (commandObject.highRankOnly) {
         const data = await staffDB.findOne({ userid: interaction.user.id });
-        if (!data) {
-            return interaction.reply(
-                `Failed to authenticate identity: you were not found in the staff database. Please run the verify command before running this command.`
-            );
-        }
-
         if (!data.hasRankPerms) {
             return interaction.reply("Only high ranks are able to use this command!");
         }
