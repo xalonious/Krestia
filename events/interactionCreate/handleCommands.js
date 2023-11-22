@@ -20,7 +20,7 @@ module.exports = async (client, interaction) => {
 
     if (commandObject.highRankOnly) {
         const data = await staffDB.findOne({ userid: interaction.user.id });
-        if (!data.hasRankPerms) {
+        if (!data?.hasRankPerms) {
             return interaction.reply("Only high ranks are able to use this command!");
         }
     }
@@ -28,7 +28,10 @@ module.exports = async (client, interaction) => {
     try {
         await commandObject.run(client, interaction);
     } catch (error) {
-        interaction.reply(`There was an error while running this command: ${error}. Check the console for more details.`);
+        if(interaction.replied || interaction.deferred) {
+            interaction.followUp(`There was an error while running this command: ${error}. Check the console for more details.`);
+        } else interaction.reply(`There was an error while running this command: ${error}. Check the console for more details.`);
+        
         console.log(error);
     }
 };
