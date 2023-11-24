@@ -1,4 +1,4 @@
-const Suggestion = require("../../schemas/Suggestion");
+const Suggestion = require("../../schemas/suggestion");
 const formatResults = require("../../utils/formatResults");
 module.exports = async(client, interaction) => {
     if(!interaction.isButton() || !interaction.customId) return;
