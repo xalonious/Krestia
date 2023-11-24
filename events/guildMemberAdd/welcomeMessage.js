@@ -6,7 +6,7 @@ module.exports = (client, guildMember) => {
     const welcomeEmbed = new EmbedBuilder()
     .setTitle("Welcome!")
     .setDescription(`Hey ${guildMember.user.username}! Welcome to the Krestia server! Before you send your first message please read the rules! Enjoy your time in the server.`)
-    .setImage("https://cdn.discordapp.com/attachments/1076652520149110894/1086038285501083771/krestia_cafe.png")
+    .setThumbnail("https://cdn.discordapp.com/attachments/1076652520149110894/1086038285501083771/krestia_cafe.png")
     .setColor([0, 255, 255])
 
     welcomeChan.send(`${guildMember}`)

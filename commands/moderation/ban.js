@@ -22,7 +22,7 @@ module.exports = {
 
         run: async(client, interaction) => {
 
-        const target = interaction.options.getUser("user")
+        const target = interaction.options.getMember("user")
 
         let reason = interaction.options.getString("reason")
         if(!reason) reason = "No reason given"

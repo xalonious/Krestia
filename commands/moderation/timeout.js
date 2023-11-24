@@ -28,7 +28,7 @@ module.exports = {
 
     run : async(client, interaction) => {
 
-        const mentionable = interaction.options.getUser("user")
+        const mentionable = interaction.options.getMember("user")
         const duration = interaction.options.getString("duration")
         let reason = interaction.options.getString("reason")
         if(!reason) reason = "No reason given"
