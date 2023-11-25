@@ -30,8 +30,10 @@ module.exports = {
             filter,
             time: 1000 * 60 * 5
         }).catch((error) => {
-            console.log(error)
+            return;
         })
+
+        if(modalInteraction == undefined) return;
 
         await modalInteraction.deferReply({ ephemeral: true })
 
@@ -56,7 +58,7 @@ module.exports = {
         const suggestionEmbed = new EmbedBuilder()
             .setAuthor({ name: interaction.user.username, iconURL: interaction.user.displayAvatarURL({ size: 256 }) })
             .addFields(
-                { name: "Suggestions", value: suggestionText },
+                { name: "Suggestion", value: suggestionText },
                 { name: "Status", value: "⌛ Pending" },
                 { name: "Votes", value: formatResults() }
             )
@@ -81,7 +83,7 @@ module.exports = {
             .setCustomId(`suggestion.${newSuggestion.suggestionId}.approve`)
 
         const rejectButton = new ButtonBuilder()
-            .setEmoji("❌")
+            .setEmoji("🗑️")
             .setLabel("Reject")
             .setStyle(ButtonStyle.Danger)
             .setCustomId(`suggestion.${newSuggestion.suggestionId}.reject`)
@@ -94,7 +96,7 @@ module.exports = {
 
         await suggestionMessage.startThread({
             name: `Discussion for ${interaction.user.username}'s Suggestion `,
-            autoArchiveDuration: 1440, 
+            autoArchiveDuration: 1440,
             reason: "Discussion thread for the suggestion"
         });
     }

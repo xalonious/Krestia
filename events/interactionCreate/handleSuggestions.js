@@ -36,7 +36,7 @@ module.exports = async(client, interaction) => {
         })
 
         return;
-    } 
+    }
 
     if(action === "reject") {
         if(!interaction.member.permissions.has("MANAGE_GUILD")) return await interaction.editReply("You do not have permission to reject suggestions.")
@@ -65,7 +65,7 @@ module.exports = async(client, interaction) => {
 
         if(hasVoted) return await interaction.editReply("You have already voted on this suggestion.")
 
-        targetSuggestion.upvotes.push(interaction.user.id) 
+        targetSuggestion.upvotes.push(interaction.user.id)
 
         await targetSuggestion.save()
 
@@ -84,7 +84,7 @@ module.exports = async(client, interaction) => {
 
         if(hasVoted) return await interaction.editReply("You have already voted on this suggestion.")
 
-        targetSuggestion.downvotes.push(interaction.user.id) 
+        targetSuggestion.downvotes.push(interaction.user.id)
 
         await targetSuggestion.save()
 
