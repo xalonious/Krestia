@@ -34,9 +34,13 @@ module.exports = async (client, interaction) => {
                 if (!permissions) return await interaction.reply({ content: "You do not have permission to close tickets.", ephemeral: true });
                 if (data.Closed) return await interaction.reply({ content: "Ticket is already closed.", ephemeral: true });
 
+                
+
                 await ticketSchema.updateOne({ ChannelID: channel.id }, { Closed: true });
 
                 channel.permissionOverwrites.edit(fetchedMember, { [PermissionsBitField.Flags.ViewChannel]: false });
+
+                await channel.setName(`closed-${fetchedMember.user.username}`);
 
                 interaction.reply(`${interaction.member} | Succesfully closed ticket.`)
             break;
@@ -47,6 +51,8 @@ module.exports = async (client, interaction) => {
                 await ticketSchema.updateOne({ ChannelID: channel.id }, { Closed: false });
 
                 channel.permissionOverwrites.edit(fetchedMember, { [PermissionsBitField.Flags.ViewChannel]: true });
+
+                await channel.setName(`ticket-${fetchedMember.user.username}`);
 
                 interaction.reply(`${interaction.member} | Succesfully reopened ticket.`)
             break;
