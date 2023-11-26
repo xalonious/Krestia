@@ -11,8 +11,12 @@ module.exports = (client, interaction) => {
         "announcements": "1091074387777687612",
         "alliances": "1089490246590283816",
         "events": "1089490252021891204",
-        "sessions": "1089490248876163072"
+        "sessions": "1089490248876163072",
+        "giveaway": "1089490247508836483",
+        "development": "1089490257470292058",
+        "qotd": "1089490233516642434"
     };
+
 
     if (!Object.keys(roles).includes(customId)) return;
 

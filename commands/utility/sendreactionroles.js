@@ -28,10 +28,16 @@ module.exports = {
             new ButtonBuilder().setCustomId("sessions").setLabel("Sessions").setStyle(ButtonStyle.Secondary).setEmoji("📲")
         )
 
+        const rrButtons3 = new ActionRowBuilder().setComponents(
+            new ButtonBuilder().setCustomId("giveaway").setLabel("Giveaways").setStyle(ButtonStyle.Primary).setEmoji("🥳"),
+            new ButtonBuilder().setCustomId("development").setLabel("Development").setStyle(ButtonStyle.Danger).setEmoji("⚒️"),
+            new ButtonBuilder().setCustomId("qotd").setLabel("QOTD").setStyle(ButtonStyle.Success).setEmoji("🤔"),
+        )
+
         const rrChannel = interaction.guild.channels.cache.get("1074169242804555777")
 
         await rrChannel.send({ embeds: [rrEmbed1], components: [rrButtons1] })
-        await rrChannel.send({ embeds: [rrEmbed2], components: [rrButtons2] })
+        await rrChannel.send({ embeds: [rrEmbed2], components: [rrButtons2, rrButtons3] })
 
         await interaction.reply({ content: "Reaction roles sent!", ephemeral: true })
     }
