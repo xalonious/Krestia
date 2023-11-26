@@ -14,24 +14,21 @@ const rankChoices = [
     { name: "Noted Customer", value: "[N] Noted Customer" },
     { name: "Awaiting Training", value: "[L] Awaiting Training" },
     { name: "Cashier", value: "[L] Cashier" },
-    { name: "Wait Staff", value: "[L] Wait Staff" },
-    { name: "Head Wait Staff", value: "[L] Head Wait Staff" },
-    { name: "Chef", value: "[L] Chef" },
+    { name: "Junior Barista", value: "[L] Junior Barista" },
+    { name: "Experienced Barista", value: "[L] Experienced Barista" },
     { name: "Staff Assistant", value: "[M] Staff Assistant" },
+    { name: "Shift Assistant", value: "[M] Shift Assistant" },
     { name: "Shift Leader", value: "[M] Shift Leader" },
     { name: "Shift Supervisor", value: "[M] Shift Supervisor" },
-    { name: "Advisor", value: "[M] Advisor" },
     { name: "Assistant Manager", value: "[H] Assistant Manager" },
     { name: "General Manager", value: "[H] General Manager" },
     { name: "Executive Assistant", value: "[H] Executive Assistant" },
     { name: "Executive Director", value: "[H] Executive Director" },
-    { name: "Executive Head", value: "[S] Executive Head" },
-    { name: "Board of Directors", value: "[S] Board Of Directors" },
-    { name: "Corporate", value: "[S] Corporate" },
+    { name: "Junior Corporate", value: "[S] Junior Corporate" },
+    { name: "Senior Corporate", value: "[S] Senior Corporate" },
+    { name: "Service Manager", value: "[S] Service Manager" },
     { name: "Developer", value: "[D] Developer" }
 ];
-
-
 
 
 module.exports = {

@@ -6,6 +6,8 @@ This bot is designed to help manage your Roblox group through Discord. It provid
 
 - Group ranking: Manually rank your staff all through discord.
 - Basic moderation commands: Kick, ban, and manage your discord server members.
+- Tickets: Create and manage support tickets for your Discord server.
+- Reaction roles: Assign roles to users based on them clicking buttons.
 - Some games: Play games with your Discord server members.
 - Staff management and activity tracking: Keep track of staff members' activity and manage their roles.
 
