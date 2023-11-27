@@ -32,6 +32,7 @@ module.exports = {
             new ButtonBuilder().setCustomId("giveaway").setLabel("Giveaways").setStyle(ButtonStyle.Primary).setEmoji("🥳"),
             new ButtonBuilder().setCustomId("development").setLabel("Development").setStyle(ButtonStyle.Danger).setEmoji("⚒️"),
             new ButtonBuilder().setCustomId("qotd").setLabel("QOTD").setStyle(ButtonStyle.Success).setEmoji("🤔"),
+            new ButtonBuilder().setCustomId("deadchat").setLabel("Dead Chat").setStyle(ButtonStyle.Secondary).setEmoji("💀")
         )
 
         const rrChannel = interaction.guild.channels.cache.get("1074169242804555777")
