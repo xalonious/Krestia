@@ -59,6 +59,7 @@ module.exports = async (client, interaction) => {
             );
 
             channel.send({
+                content: "<@&1089639862841381025>",
                 embeds: [ticketEmbed],
                 components: [ticketButtons1, ticketButtons2],
             });
