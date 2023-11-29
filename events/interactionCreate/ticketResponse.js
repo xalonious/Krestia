@@ -50,12 +50,12 @@ module.exports = async (client, interaction) => {
 
             const ticketButtons1 = new ActionRowBuilder().setComponents(
                 new ButtonBuilder().setCustomId("close").setLabel("Close Ticket").setStyle(ButtonStyle.Primary).setEmoji("🔒"),
-                new ButtonBuilder().setCustomId("open").setLabel("Open Ticket").setStyle(ButtonStyle.Secondary).setEmoji("🔓")
+                new ButtonBuilder().setCustomId("open").setLabel("Open Ticket").setStyle(ButtonStyle.Success).setEmoji("🔓")
             );
 
             const ticketButtons2 = new ActionRowBuilder().setComponents(
                 new ButtonBuilder().setCustomId("delete").setLabel("Delete Ticket").setStyle(ButtonStyle.Danger).setEmoji("🗑️"),
-                new ButtonBuilder().setCustomId("transcript").setLabel("Save Transcript").setStyle(ButtonStyle.Primary).setEmoji("📑")
+                new ButtonBuilder().setCustomId("transcript").setLabel("Save Transcript").setStyle(ButtonStyle.Secondary).setEmoji("📑")
             );
 
             channel.send({

@@ -34,7 +34,7 @@ module.exports = async (client, interaction) => {
                 if (!permissions) return await interaction.reply({ content: "You do not have permission to close tickets.", ephemeral: true });
                 if (data.Closed) return await interaction.reply({ content: "Ticket is already closed.", ephemeral: true });
 
-                
+
 
                 await ticketSchema.updateOne({ ChannelID: channel.id }, { Closed: true });
 
@@ -42,7 +42,7 @@ module.exports = async (client, interaction) => {
 
                 await channel.setName(`closed-${fetchedMember.user.username}`);
 
-                interaction.reply(`${interaction.member} | Succesfully closed ticket.`)
+                interaction.reply(`Ticket closed by ${interaction.member}`)
             break;
             case "open":
                 if (!permissions) return await interaction.reply({ content: "You do not have permission to open tickets.", ephemeral: true });
@@ -54,7 +54,7 @@ module.exports = async (client, interaction) => {
 
                 await channel.setName(`ticket-${fetchedMember.user.username}`);
 
-                interaction.reply(`${interaction.member} | Succesfully reopened ticket.`)
+                interaction.reply(`Ticket reopened by ${interaction.member}`)
             break;
             case "transcript":
                 const transcriptChannel = guild.channels.cache.get("1081320013836865616");
@@ -63,22 +63,28 @@ module.exports = async (client, interaction) => {
 
                 const transcript = await createTranscript(channel, {
                     filename: `ticket-${data.TicketID} (${fetchedMember.user.username}).html`,
-                })
+                });
 
                 const transcriptEmbed = new EmbedBuilder()
                     .setTitle(`Transcript for ticket #${data.TicketID}`)
-                    .setDescription(`Ticket type: ${data.Type.toUpperCase()}`)
+
                     .setColor("Blue")
                     .setTimestamp()
-                    .setFooter({ text: fetchedMember.user.username, iconURL: fetchedMember.user.displayAvatarURL({ dynamic: true }) });
-
+                    .setAuthor({name: fetchedMember.user.username, iconURL: fetchedMember.displayAvatarURL({ dynamic: true })})
+                    .addFields(
+                        { name: "Ticket Owner", value: `${fetchedMember}`, inline: true },
+                        { name: "Ticket Name", value: channel.name, inline: true },
+                        { name: "Ticket ID", value: data.TicketID, inline: true},
+                        { name: "Type", value: data.Type.toUpperCase(), inline: true}
+                    )
+                    .setThumbnail("https://cdn3.iconfinder.com/data/icons/block/32/ticket-512.png")
 
                 await transcriptChannel.send({
                     embeds: [transcriptEmbed],
                     files: [transcript]
-                })
+                });
 
-                interaction.editReply("Transcript succesfully saved!")
+                interaction.editReply("Transcript successfully saved!");
 
         }
     } catch (err) {
