@@ -1,5 +1,5 @@
 const Suggestion = require("../../schemas/suggestion");
-const formatResults = require("../../utils/formatResults");
+const formatResults = require("../../utils/formatSuggestionResults");
 module.exports = async(client, interaction) => {
     if(!interaction.isButton() || !interaction.customId) return;
 
@@ -16,9 +16,12 @@ module.exports = async(client, interaction) => {
     const targetMessage = await interaction.channel.messages.fetch(targetSuggestion.messageId)
     const targetMessageEmbed = targetMessage.embeds[0]
 
+    const permRoles = ["1089484325931720734", "1089485004654006272"]
+    const hasPerms = interaction.member.roles.cache.some(role => permRoles.includes(role.id))
+
 
     if(action === "approve") {
-        if(!interaction.member.permissions.has("MANAGE_GUILD")) return await interaction.editReply("You do not have permission to approve suggestions.")
+        if(!hasPerms) return await interaction.editReply("You do not have permission to approve suggestions.")
 
         targetSuggestion.status = "approved"
 
@@ -39,7 +42,7 @@ module.exports = async(client, interaction) => {
     }
 
     if(action === "reject") {
-        if(!interaction.member.permissions.has("MANAGE_GUILD")) return await interaction.editReply("You do not have permission to reject suggestions.")
+        if(!hasPerms) return await interaction.editReply("You do not have permission to reject suggestions.")
 
         targetSuggestion.status = "rejected"
 
@@ -71,7 +74,7 @@ module.exports = async(client, interaction) => {
 
         interaction.editReply("Upvoted suggestion!")
 
-        targetMessageEmbed.fields[2].value = formatResults(targetSuggestion.upvotes, targetSuggestion.downvotes)
+        targetMessageEmbed.fields[2].value = formatSuggestionResults(targetSuggestion.upvotes, targetSuggestion.downvotes)
 
         targetMessage.edit({ embeds: [targetMessageEmbed] })
 
@@ -90,7 +93,7 @@ module.exports = async(client, interaction) => {
 
         interaction.editReply("Downvoted suggestion!")
 
-        targetMessageEmbed.fields[2].value = formatResults(targetSuggestion.upvotes, targetSuggestion.downvotes)
+        targetMessageEmbed.fields[2].value = formatSuggestionResults(targetSuggestion.upvotes, targetSuggestion.downvotes)
 
         targetMessage.edit({ embeds: [targetMessageEmbed] })
 

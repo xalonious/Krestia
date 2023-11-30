@@ -1,6 +1,6 @@
 const { ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder, EmbedBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
 const Suggestion = require("../../schemas/suggestion");
-const formatResults = require("../../utils/formatResults");
+const formatSuggestionResults = require("../../utils/formatSuggestionResults");
 module.exports = {
     name: "suggest",
     description: "Suggest a feature for the server",
@@ -60,7 +60,7 @@ module.exports = {
             .addFields(
                 { name: "Suggestion", value: suggestionText },
                 { name: "Status", value: "⌛ Pending" },
-                { name: "Votes", value: formatResults() }
+                { name: "Votes", value: formatSuggestionResults() }
             )
             .setColor("Yellow")
 
