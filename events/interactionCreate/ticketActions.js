@@ -18,7 +18,10 @@ module.exports = async (client, interaction) => {
 
         if (!data) return;
 
-       const fetchedMember = await guild.members.cache.get(data.MemberID);
+       let ticketOwner = await guild.members.cache.get(data.MemberID);
+       if(!ticketOwner) {
+        ticketOwner = await guild.members.fetch(data.MemberID);
+}
 
         switch (customId) {
             case "delete":
@@ -38,9 +41,9 @@ module.exports = async (client, interaction) => {
 
                 await ticketSchema.updateOne({ ChannelID: channel.id }, { Closed: true });
 
-                channel.permissionOverwrites.edit(fetchedMember, { [PermissionsBitField.Flags.ViewChannel]: false });
+                channel.permissionOverwrites.edit(ticketOwner, { [PermissionsBitField.Flags.ViewChannel]: false });
 
-                await channel.setName(`closed-${fetchedMember.user.username}`);
+                await channel.setName(`closed-${ticketOwner.user.username}`);
 
                 interaction.reply(`Ticket closed by ${interaction.member}`)
             break;
@@ -50,9 +53,9 @@ module.exports = async (client, interaction) => {
 
                 await ticketSchema.updateOne({ ChannelID: channel.id }, { Closed: false });
 
-                channel.permissionOverwrites.edit(fetchedMember, { [PermissionsBitField.Flags.ViewChannel]: true });
+                channel.permissionOverwrites.edit(ticketOwner, { [PermissionsBitField.Flags.ViewChannel]: true });
 
-                await channel.setName(`ticket-${fetchedMember.user.username}`);
+                await channel.setName(`ticket-${ticketOwner.user.username}`);
 
                 interaction.reply(`Ticket reopened by ${interaction.member}`)
             break;
@@ -62,7 +65,7 @@ module.exports = async (client, interaction) => {
                 await interaction.reply("Creating transcript...");
 
                 const transcript = await createTranscript(channel, {
-                    filename: `ticket-${data.TicketID} (${fetchedMember.user.username}).html`,
+                    filename: `ticket-${data.TicketID}.html`,
                 });
 
                 const transcriptEmbed = new EmbedBuilder()
@@ -70,9 +73,9 @@ module.exports = async (client, interaction) => {
 
                     .setColor("Blue")
                     .setTimestamp()
-                    .setAuthor({name: fetchedMember.user.username, iconURL: fetchedMember.displayAvatarURL({ dynamic: true })})
+                    .setAuthor({name: ticketOwner.user.username, iconURL: ticketOwner.displayAvatarURL({ dynamic: true })})
                     .addFields(
-                        { name: "Ticket Owner", value: `${fetchedMember}`, inline: true },
+                        { name: "Ticket Owner", value: `${ticketOwner}`, inline: true },
                         { name: "Ticket Name", value: channel.name, inline: true },
                         { name: "Ticket ID", value: data.TicketID, inline: true},
                         { name: "Type", value: data.Type.toUpperCase(), inline: true}
