@@ -30,10 +30,7 @@ const suggestionSchema = new mongoose.Schema({
     downvotes: {
         type: [String],
         default: []
-    },
-    
-}, {
-    timestamps: true
+    }
 })
 
 module.exports = mongoose.model("suggestion", suggestionSchema)
