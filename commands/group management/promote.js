@@ -72,7 +72,7 @@ module.exports = {
          })
         
         
-        if((currentRank == "[P] Vice-President") || (currentRank == "[P] President") || (currentRank == "[P] Presidential Assistant")) return interaction.editReply("Their rank is the same as or above mine, I can't do that")
+        if((currentRank == "[P] Vice-President") || (currentRank == "[P] President") || (currentRank == "[A] Automation")) return interaction.editReply("Their rank is the same as or above mine, I can't do that")
         
        
         
