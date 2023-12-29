@@ -23,7 +23,7 @@ module.exports = async (client, interaction) => {
         ticketOwner = await guild.members.fetch(data.MemberID);
 }
 
-        if(!permissions) return await interaction.reply({content: "You do not have permission to delete tickets.", ephemeral: true});
+        if(!permissions) return await interaction.reply({content: "You do not have permission to do that.", ephemeral: true});
 
         switch (customId) {
             case "delete":
