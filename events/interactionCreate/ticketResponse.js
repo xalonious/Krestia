@@ -32,7 +32,7 @@ module.exports = async (client, interaction) => {
             ],
         })
         .then(async (channel) => {
-            const newTicket = await ticketSchema.create({
+               await ticketSchema.create({
                 MemberID: member.id,
                 TicketID: ticketId,
                 ChannelID: channel.id,

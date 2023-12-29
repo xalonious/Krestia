@@ -23,9 +23,10 @@ module.exports = async (client, interaction) => {
         ticketOwner = await guild.members.fetch(data.MemberID);
 }
 
+        if(!permissions) return await interaction.reply({content: "You do not have permission to delete tickets.", ephemeral: true});
+
         switch (customId) {
             case "delete":
-                if(!permissions) return await interaction.reply({content: "You do not have permission to delete tickets.", ephemeral: true});
                 await interaction.reply("Ticket will be deleted in 5 seconds...");
                 setTimeout(async () => {
                     await channel.delete();
@@ -34,10 +35,7 @@ module.exports = async (client, interaction) => {
                 await data.deleteOne();
                 break;
             case "close":
-                if (!permissions) return await interaction.reply({ content: "You do not have permission to close tickets.", ephemeral: true });
                 if (data.Closed) return await interaction.reply({ content: "Ticket is already closed.", ephemeral: true });
-
-
 
                 await ticketSchema.updateOne({ ChannelID: channel.id }, { Closed: true });
 
@@ -48,7 +46,6 @@ module.exports = async (client, interaction) => {
                 interaction.reply(`Ticket closed by ${interaction.member}`)
             break;
             case "open":
-                if (!permissions) return await interaction.reply({ content: "You do not have permission to open tickets.", ephemeral: true });
                 if (!data.Closed) return await interaction.reply({ content: "Ticket is already open.", ephemeral: true });
 
                 await ticketSchema.updateOne({ ChannelID: channel.id }, { Closed: false });
@@ -61,7 +58,6 @@ module.exports = async (client, interaction) => {
             break;
             case "transcript":
                 const transcriptChannel = guild.channels.cache.get("1081320013836865616");
-                if (!permissions) return await interaction.reply({ content: "You do not have permission to create transcripts.", ephemeral: true });
                 await interaction.reply("Creating transcript...");
 
                 const transcript = await createTranscript(channel, {
@@ -70,9 +66,7 @@ module.exports = async (client, interaction) => {
 
                 const transcriptEmbed = new EmbedBuilder()
                     .setTitle(`Transcript for ticket #${data.TicketID}`)
-
                     .setColor("Blue")
-                    .setTimestamp()
                     .setAuthor({name: ticketOwner.user.username, iconURL: ticketOwner.displayAvatarURL({ dynamic: true })})
                     .addFields(
                         { name: "Ticket Owner", value: `${ticketOwner}`, inline: true },
@@ -81,6 +75,7 @@ module.exports = async (client, interaction) => {
                         { name: "Type", value: data.Type.toUpperCase(), inline: true}
                     )
                     .setThumbnail("https://cdn3.iconfinder.com/data/icons/block/32/ticket-512.png")
+                    .setFooter({text: "Krestia Ticket System", iconURL: `${guild.iconURL()}`})
 
                 await transcriptChannel.send({
                     embeds: [transcriptEmbed],
