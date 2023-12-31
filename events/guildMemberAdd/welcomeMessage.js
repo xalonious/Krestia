@@ -9,6 +9,5 @@ module.exports = (client, guildMember) => {
     .setThumbnail("https://cdn.discordapp.com/attachments/1076652520149110894/1086038285501083771/krestia_cafe.png")
     .setColor([0, 255, 255])
 
-    welcomeChan.send(`${guildMember}`)
-    welcomeChan.send({ embeds: [welcomeEmbed]})
+    welcomeChan.send({ content: `${guildMember}`, embeds: [welcomeEmbed]})
 }
