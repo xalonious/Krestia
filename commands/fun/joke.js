@@ -15,7 +15,7 @@ module.exports = {
 
         
             const embed = new EmbedBuilder()
-                .setTitle(`Funny as jokes by the best bot in town!! | Category: ${joke.category}`)
+                .setTitle(`Funny as f jokes by the best bot in town!! | Category: ${joke.category}`)
                 .setDescription(`${joke.setup}\n\n${joke.delivery}`)
                 .setColor('#0099ff');
 
