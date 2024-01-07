@@ -5,13 +5,8 @@ const { EmbedBuilder } = require("discord.js")
 let lastMemberCount;
 let jsonData;
 
-
 module.exports = async(client) => {
     lastMemberCount = await getMemberCount()
-    fs.readFile("goal.json", (err, data) => {
-        if (err) throw err;
-        jsonData = JSON.parse(data);
-    });
 
     const memChannel = client.channels.cache.get("1097184023245234258")
     const VC = client.channels.cache.get("1097183583866716202")
@@ -29,6 +24,11 @@ module.exports = async(client) => {
         )
 
     async function updateMemberCount() {
+        fs.readFile("goal.json", (err, data) => {
+            if (err) throw err;
+            jsonData = JSON.parse(data);
+        });
+
         const currentCount = await getMemberCount()
 
         if (currentCount !== lastMemberCount) {
