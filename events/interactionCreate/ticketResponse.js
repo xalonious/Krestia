@@ -27,7 +27,7 @@ module.exports = async (client, interaction) => {
             parent: "1081320016156299264",
             permissionOverwrites: [
                 { id: "1074154728545583174", deny: [PermissionsBitField.Flags.ViewChannel] },
-                { id: member.id, allow: [PermissionsBitField.Flags.ViewChannel] },
+                { id: member.id, allow: [PermissionsBitField.Flags.ViewChannel, PermissionsBitField.Flags.EmbedLinks] },
                 { id: "1089639862841381025", allow: [PermissionsBitField.Flags.ViewChannel]}
             ],
         })

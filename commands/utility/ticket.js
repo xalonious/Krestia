@@ -6,11 +6,14 @@ module.exports = {
 
     run: async (client, interaction) => {
         const ticketEmbed = new EmbedBuilder()
-            .setDescription("To create a ticket, select an option from the drop-down menu!");
+            .setTitle("Krestia Support System")
+            .setDescription("Select an option from the menu below to open a ticket.")
+            .setColor("Blurple")
+            .setThumbnail(interaction.guild.iconURL())
 
         const selectMenu = new StringSelectMenuBuilder()
             .setCustomId("ticket")
-            .setPlaceholder("Select an option")
+            .setPlaceholder("Select an option...")
             .addOptions([
                 new StringSelectMenuOptionBuilder()
                     .setLabel("General Support")
