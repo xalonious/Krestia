@@ -61,7 +61,7 @@ module.exports = {
 
 
             if(!await checkAllowance(runnerID, userId)) return interaction.editReply({
-                content: "Unauthorized rank change: the user you are trying to demote has a role that is equal to or above your own.",
+                content: "Unauthorized rank change: the user you are trying to fire has a role that is equal to or above your own.",
              })
        
       if((currentRank == "[P] Vice-President") || (currentRank == "[P] President") || (currentRank == "[A] Automation")) return interaction.editReply("Their rank is the same as or above mine, I can't do that")
