@@ -52,8 +52,8 @@ module.exports = async (client) => {
     }
 
     const staffMembers = await staffSchema.find({});
-    const lastMonday = new Date(now.getFullYear(), now.getMonth(), now.getDate() - now.getDay() + 1 - 7);
-    const lastSunday = new Date(now.getFullYear(), now.getMonth(), now.getDate() - now.getDay() + 7 - 7);
+    const lastMonday = new Date(now.getFullYear(), now.getMonth(), now.getDate() - now.getDay() - 6);
+    const lastSunday = new Date(now.getFullYear(), now.getMonth(), now.getDate() - now.getDay());
     const users = staffMembers.slice().sort((a, b) => b.messages - a.messages);
     const messagesRanking = users.map((user, index) => `\`${index + 1}\` <@${user.userid}> - ${user.messages}`).join("\n");
 
