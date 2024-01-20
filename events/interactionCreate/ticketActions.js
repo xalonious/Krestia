@@ -86,6 +86,15 @@ module.exports = async (client, interaction) => {
 
         }
     } catch (err) {
-        throw err;
+        if (err.message === "Unknown Member") {
+            await interaction.reply("Ticket owner has left the server. Deleting ticket in 5 seconds...");
+            setTimeout(async () => {
+                await channel.delete();
+            }, 5000);
+
+            await ticketSchema.deleteOne({ ChannelID: channel.id });
+        } else {
+            console.log(err);
+        }
     }
 };

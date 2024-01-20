@@ -2,49 +2,46 @@ const server = "1074154728545583174"
 const areCommandsDifferent = require("../../utils/areCommandsDifferent")
 const getApplicationCommands = require("../../utils/getApplicationCommands")
 const getLocalCommands = require("../../utils/getLocalCommands")
-module.exports = async (client) => {
 
+module.exports = async (client) => {
     try {
         const localCommands = getLocalCommands()
         const applicationCommands = await getApplicationCommands(client, server)
 
-        for(const localCommand of localCommands) {
+        const localCommandNames = new Set(localCommands.map(cmd => cmd.name));
+
+        for (const existingCommand of applicationCommands.cache.values()) {
+            if (!localCommandNames.has(existingCommand.name)) {
+                await applicationCommands.delete(existingCommand.id);
+                console.log(`🗑️  | Deleted command ${existingCommand.name}`);
+            }
+        }
+
+        for (const localCommand of localCommands) {
             const { name, description, options } = localCommand;
 
-            const existingCommand = await applicationCommands.cache.find((cmd) => cmd.name === name)
+            const existingCommand = applicationCommands.cache.find((cmd) => cmd.name === name)
 
-            if(existingCommand) {
-                if(localCommand.deleted) {
-                    await applicationCommands.delete(existingCommand.id)
-                    console.log(`🗑️  | Deleted command ${name}`)
-                    continue;
+            if (existingCommand) {
+                if (areCommandsDifferent(existingCommand, localCommand)) {
+                    await applicationCommands.edit(existingCommand.id, {
+                        description,
+                        options: options || []
+                    });
+
+                    console.log(`🔀  | Edited command ${name}`);
                 }
-
-          if(areCommandsDifferent(existingCommand, localCommand)) {
-            await applicationCommands.edit(existingCommand.id, {
-                description,
-                options: options || []
-            })
-
-            console.log(`🔀  | Edited command ${name}`)
-          }
             } else {
-                if(localCommand.deleted) {
-                    console.log(`⏩  | Skipping registering command ${name} as it is set to delete`)
-                    continue;
-                }
-
                 await applicationCommands.create({
                     name,
                     description,
                     options
-                })
+                });
 
-                console.log(`👍  | Registered command ${name}`)
+                console.log(`👍  | Registered command ${name}`);
             }
         }
-
     } catch (error) {
-        console.log(`⚠️  | An error occured while registering commands: ${error}`)
+        console.log(`⚠️  | An error occurred while registering commands: ${error}`);
     }
-}
+};
