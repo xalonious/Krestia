@@ -4,7 +4,7 @@ const { randomUUID } = require("crypto")
 const suggestionSchema = new mongoose.Schema({
     suggestionId: {
         type: String,
-        default: randomUUID()
+        default: () => randomUUID()
     },
     authorId: {
         type: String,
@@ -19,10 +19,7 @@ const suggestionSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    status: {
-        type: String,
-        default: "pending"
-    },
+
     upvotes: {
         type: [String],
         default: []

@@ -19,24 +19,25 @@ module.exports = async(client, interaction) => {
     const permRoles = ["1089484325931720734", "1089485004654006272"]
     const hasPerms = interaction.member.roles.cache.some(role => permRoles.includes(role.id))
 
+    const hasUpvoted = targetSuggestion.upvotes.includes(interaction.user.id);
+    const hasDownvoted = targetSuggestion.downvotes.includes(interaction.user.id);
+
 
     if(action === "approve") {
         if(!hasPerms) return await interaction.editReply("You do not have permission to approve suggestions.")
-
-        targetSuggestion.status = "approved"
 
         targetMessageEmbed.data.color = 0x84e660
         targetMessageEmbed.fields[1].value = "✅ Approved"
 
 
-        await targetSuggestion.save()
-
         interaction.editReply("Suggestion approved!")
 
         targetMessage.edit({
             embeds: [targetMessageEmbed],
-            components: [targetMessage.components[0]]
+            components: []
         })
+
+        await targetSuggestion.deleteOne()
 
         return;
     }
@@ -44,29 +45,33 @@ module.exports = async(client, interaction) => {
     if(action === "reject") {
         if(!hasPerms) return await interaction.editReply("You do not have permission to reject suggestions.")
 
-        targetSuggestion.status = "rejected"
-
         targetMessageEmbed.data.color = 0xff6161
         targetMessageEmbed.fields[1].value = "❌ Rejected"
 
-        await targetSuggestion.save()
 
         interaction.editReply("Suggestion rejected!")
 
 
         targetMessage.edit({
             embeds: [targetMessageEmbed],
-            components: [targetMessage.components[0]]
+            components: []
         })
+
+        await targetSuggestion.deleteOne()
 
         return;
     }
 
 
     if(action === "upvote") {
-        const hasVoted = targetSuggestion.upvotes.includes(interaction.user.id) || targetSuggestion.downvotes.includes(interaction.user.id)
 
-        if(hasVoted) return await interaction.editReply("You have already voted on this suggestion.")
+        if(hasUpvoted) {
+            return interaction.editReply("You have already upvoted this suggestion.")
+        }
+
+        if(hasDownvoted) {
+            targetSuggestion.downvotes = targetSuggestion.downvotes.filter(id => id !== interaction.user.id)
+        }
 
         targetSuggestion.upvotes.push(interaction.user.id)
 
@@ -83,9 +88,14 @@ module.exports = async(client, interaction) => {
 
 
     if(action === "downvote") {
-        const hasVoted = targetSuggestion.upvotes.includes(interaction.user.id) || targetSuggestion.downvotes.includes(interaction.user.id)
 
-        if(hasVoted) return await interaction.editReply("You have already voted on this suggestion.")
+        if(hasDownvoted) {
+            return interaction.editReply("You have already downvoted this suggestion.")
+        }
+
+        if(hasUpvoted) {
+            targetSuggestion.upvotes = targetSuggestion.upvotes.filter(id => id !== interaction.user.id)
+        }
 
         targetSuggestion.downvotes.push(interaction.user.id)
 
