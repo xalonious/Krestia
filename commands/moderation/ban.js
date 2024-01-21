@@ -22,13 +22,14 @@ module.exports = {
 
         run: async(client, interaction) => {
 
+        await interaction.deferReply()
+
         const target = interaction.options.getMember("user")
 
-        let reason = interaction.options.getString("reason")
-        if(!reason) reason = "No reason given"
+        let reason = interaction.options.getString("reason") || "No reason given"
        
 
-            if(interaction.member.roles.highest.position <= target.roles.highest.position && interaction.user.id !== interaction.guild.ownerId) return interaction.reply({
+            if(interaction.member.roles.highest.position <= target.roles.highest.position && interaction.user.id !== interaction.guild.ownerId) return interaction.editReply({
                 content: "You cannot ban someone with a role that is equal to or higher than yours.",
                 ephemeral: true
             })
@@ -36,9 +37,10 @@ module.exports = {
                 .setTitle(`You were banned from ${interaction.guild.name}`)
                 .addFields(
                     {name: "Ban reason", value: reason},
-                    {name: "Moderator", value: `${interaction.member}`}
+                    {name: "Moderator", value: `${interaction.member}`},
+                    {name: "If you wish to appeal, please fill out the form below", value: "[📎 Ban Appeal Form](https://forms.gle/TemVMjLXaxP5hTXs6)"}
                 )
-                .setColor([255, 0, 0])
+                .setColor("Red")
                 .setThumbnail(interaction.guild.iconURL())
 
                     let confirmationMessage = `Succesfully banned ${target.user.tag}`
@@ -53,7 +55,7 @@ module.exports = {
               setTimeout(() => {
                  target.ban({
                     reason: reason
-                }).then(() => interaction.reply(confirmationMessage))
+                }).then(() => interaction.editReply(confirmationMessage))
               }, 1000)
                 
 
