@@ -63,6 +63,7 @@ module.exports = {
                 { name: "Votes", value: formatSuggestionResults() }
             )
             .setColor("Yellow")
+            .setFooter({text: "Want to create a suggestion of your own? Use the /suggest command!", iconURL: interaction.guild.iconURL()})
 
         const upvoteButton = new ButtonBuilder()
             .setEmoji("👍")
