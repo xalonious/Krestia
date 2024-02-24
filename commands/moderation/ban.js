@@ -43,13 +43,11 @@ module.exports = {
                     .setTitle("User banned")
                     .setDescription("Someone was banned from the server")
                     .addFields(
-                        { name: "User", value: `${target}` },
                         { name: "User ID", value: `${targetId}` },
                         { name: "Reason", value: reason },
                         { name: "Responsible moderator", value: `${interaction.member}` }
                     )
                     .setColor("Red")
-                    .setThumbnail(target.user.displayAvatarURL());
 
                 const logschan = interaction.guild.channels.cache.get(process.env.LOGSCHAN);
 
@@ -57,6 +55,7 @@ module.exports = {
 
                 return interaction.editReply(`Successfully banned user with ID ${targetId}`);
             } catch (error) {
+                console.log(error)
                 return interaction.editReply(`Failed to ban user with ID ${targetId}`);
             }
         }
@@ -90,6 +89,25 @@ module.exports = {
             target.ban({
                 reason: reason,
             }).then(() => interaction.editReply(confirmationMessage));
+
+
+
+            const logEmbed = new EmbedBuilder()
+                    .setTitle("User banned")
+                    .setDescription("Someone was banned from the server")
+                    .addFields(
+                        { name: "User", value: `${target}` },
+                        { name: "Reason", value: reason },
+                        { name: "Responsible moderator", value: `${interaction.member}` }
+                    )
+                    .setColor("Red")
+                    .setThumbnail(target.user.displayAvatarURL());
+
+                const logschan = interaction.guild.channels.cache.get(process.env.LOGSCHAN);
+
+                logschan.send({ embeds: [logEmbed] });
+
+
         }, 1000);
     },
 };

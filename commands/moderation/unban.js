@@ -25,15 +25,18 @@ module.exports = {
             const logEmbed = new EmbedBuilder()
                 .setTitle('User unbanned')
                 .setDescription('Someone was unbanned from the server')
-                .addField('Unbanned User', user.tag)
-                .addField('Unbanned By', interaction.user.tag)
+                .addFields(
+                    {name: "Unbanned user", value: `${user.tag}`},
+                    {name: "Unbanned by", value: `${interaction.user.tag}`}
+                )
                 .setColor('Green');
 
             const logschan = interaction.guild.channels.cache.get(process.env.LOGSCHAN);
             logschan.send({ embeds: [logEmbed] });
 
             return interaction.reply(`Successfully unbanned user ${user.tag}`);
-        } catch {
+        } catch(error) {
+            console.log(error)
             return interaction.reply({
                 content: "The user ID is invalid or the user is not banned.",
                 ephemeral: true
