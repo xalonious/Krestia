@@ -15,19 +15,18 @@ module.exports = {
      ],
 
 
-        run : async(client, interaction) => {
-        
-           const tar = interaction.options.getString("user")
-
-
+     run: async (client, interaction) => {
+        const tar = interaction.options.getString("user");
+    
         try {
-            const user = await interaction.guild.members.unban(tar)
-            return interaction.reply(`Succesfully unbanned user ${user.user.tag}`)
+            await interaction.guild.members.unban(tar);
+            const user = await client.users.fetch(tar);
+            return interaction.reply(`Successfully unbanned user ${user.tag}`);
         } catch {
             return interaction.reply({
-                content: "The user id is invalid or the user is not banned.",
+                content: "The user ID is invalid or the user is not banned.",
                 ephemeral: true
-            })
+            });
         }
     }
 }
