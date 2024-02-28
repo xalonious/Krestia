@@ -9,7 +9,7 @@ const pb = {
 
 module.exports = (upvotes = [], downvotes = []) => {
     const totalVotes = upvotes.length + downvotes.length;
-    const progressBarLength = 14;
+    const progressBarLength = 11;
     const filledSquares = Math.round((upvotes.length / totalVotes) * progressBarLength) || 0;
     const emptySquares = progressBarLength - filledSquares || 0;
 
