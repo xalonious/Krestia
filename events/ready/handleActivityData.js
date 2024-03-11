@@ -1,6 +1,6 @@
 const { EmbedBuilder } = require("discord.js");
 const schedule = require('node-schedule');
-const staffSchema = require("../../models/staffMember");
+const staffSchema = require("../../schemas/staffMember");
 const generateToken = require("../../utils/generateToken");
 
 module.exports = async (client) => {
