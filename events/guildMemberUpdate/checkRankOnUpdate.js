@@ -63,7 +63,7 @@ module.exports = async (client, oldMember, newMember) => {
                     const isImmuneToQuota = rankInGroup >= 198
                     const today = new Date();
                     const nextSunday = new Date();
-                    nextSunday.setDate(today.getDate() + (7 - today.getDay()) % 7 + 1);
+                    nextSunday.setDate(today.getDate() + (7 - today.getDay()) % 7);
 
                     await staffSchema.create({
                         userid: memberID,
