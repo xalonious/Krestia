@@ -15,7 +15,7 @@ module.exports = async (client, oldMember, newMember) => {
 
     const isRankAbove75 = async (robloxUsername) => {
         const robloxUserId = await noblox.getIdFromUsername(robloxUsername);
-        const rankInGroup = await noblox.getRankInGroup(process.env.GROUP, robloxUserId); 
+        const rankInGroup = await noblox.getRankInGroup(process.env.GROUP, robloxUserId);
         return rankInGroup >= 75;
     };
 
@@ -60,12 +60,24 @@ module.exports = async (client, oldMember, newMember) => {
                 const rankInGroup = await noblox.getRankInGroup(process.env.GROUP, data.robloxID);
                 if (rankInGroup >= 55) {
                     const hasRankPerms = rankInGroup >= 75;
+                    const isImmuneToQuota = rankInGroup >= 198
+                    const today = new Date();
+                    const nextSunday = new Date();
+                    nextSunday.setDate(today.getDate() + (7 - today.getDay()) % 7 + 1);
+
                     await staffSchema.create({
                         userid: memberID,
                         robloxuser: robloxUsername,
                         messages: 0,
                         hasRankPerms,
-                        strikes: []
+                        strikes: [], 
+                        isImmuneToQuota: isImmuneToQuota,
+                        inactivity: {
+                            isOnInactivity: true,
+                            startDate: today,
+                            endDate: nextSunday
+                        }
+
                     });
                 }
             } else {

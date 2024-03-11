@@ -1,7 +1,9 @@
 const { ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder } = require("discord.js");
-const staffSchema = require("../../models/staffMember");
+const staffSchema = require("../../schemas/staffMember");
 
 module.exports = async (client, interaction) => {
+
+    if(!interaction.isButton()) return;
     if (!interaction.customId.startsWith("accept_") && !interaction.customId.startsWith("deny_")) return;
 
     if (interaction.customId.startsWith("accept_")) {
@@ -29,7 +31,7 @@ module.exports = async (client, interaction) => {
             const inRole = interaction.guild.roles.cache.get("1100853944353300500");
             const member = await interaction.guild.members.fetch(userId);
             await member.roles.add(inRole);
-            
+
         } else {
             isOnInactivity = false;
         }

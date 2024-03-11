@@ -5,22 +5,20 @@ const generateToken = require("../../utils/generateToken");
 
 module.exports = async (client) => {
   const rule = new schedule.RecurrenceRule();
-  rule.dayOfWeek = 5;
-  rule.hour = 23;
-  rule.minute = 5;
+  rule.dayOfWeek = 1;
+  rule.hour = 6;
+  rule.minute = 0;
 
   schedule.scheduleJob(rule, async () => {
-    await sendActivityEmbeds();
+    await handleActivityData();
   });
 
-  async function sendActivityEmbeds() {
+  async function handleActivityData() {
     const activityChan = client.channels.cache.get("1215763529756315700");
     const allStaff = await staffSchema.find({});
 
     const guild = client.guilds.cache.get("959751115640029224");
     const inactivityRole = "1178013745163800668";
-
-
 
     const lowActivityUsers = allStaff.filter(user => user.messages < 50);
     const strikedUsers = [];
@@ -53,11 +51,7 @@ module.exports = async (client) => {
 
     const now = new Date();
     for (const user of allStaff) {
-      console.log(user.inactivity.startDate)
-      console.log(now)
-      console.log(user.inactivity.startDate <= now)
-      if (!user.inactivity.isOnInactivity && user.inactivity.startDate <= now) {
-        console.log("entered if")
+      if (!user.inactivity.isOnInactivity && user.inactivity.startDate instanceof Date && user.inactivity.startDate <= now) {
         await staffSchema.updateOne(
           { userid: user.userid },
           { $set: { "inactivity.isOnInactivity": true } }
@@ -68,7 +62,7 @@ module.exports = async (client) => {
 
       
 
-      if (user.inactivity.isOnInactivity && user.inactivity.endDate <= now) {
+      if (user.inactivity.isOnInactivity && user.inactivity.endDate instanceof Date && user.inactivity.endDate <= now) {
         await staffSchema.updateOne(
           { userid: user.userid },
           {
@@ -84,14 +78,13 @@ module.exports = async (client) => {
       }
     }
 
-    console.log("Successfully checked inactivity status");
-
-    
-
     const staffMembers = await staffSchema.find({});
     const lastMonday = new Date(now.getFullYear(), now.getMonth(), now.getDate() - now.getDay() - (now.getDay() === 0 ? 6 : 7));
     const lastSunday = new Date(now.getFullYear(), now.getMonth(), now.getDate() - now.getDay());
-    const messagesRanking = staffMembers.map((user, index) => `\`${index + 1}\` <@${user.userid}> - ${user.messages}`).join("\n");
+    const messagesRanking = staffMembers
+      .sort((a, b) => b.messages - a.messages)
+      .map((user, index) => `\`${index + 1}\` <@${user.userid}> - ${user.messages}`)
+      .join("\n");
 
     const lbEmbed = new EmbedBuilder()
       .setAuthor({

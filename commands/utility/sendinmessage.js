@@ -17,7 +17,7 @@ module.exports = {
         )
 
 
-        const inChannel = interaction.guild.channels.cache.get("1078049217777504369")
+        const inChannel = interaction.guild.channels.cache.get("1216016917358313603")
 
         await inChannel.send({ embeds: [inEmbed], components: [submitButton] })
 

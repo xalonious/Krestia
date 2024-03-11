@@ -1,8 +1,6 @@
-{
-    const { ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder } = require("discord.js");
-    const getUserAvatar = require("../../utils/getUserAvatar");
-    const staffSchema = require("../../models/staffMember");
-    const noblox = require("noblox.js");
+ const { ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder } = require("discord.js");const getUserAvatar = require("../../utils/getUserAvatar");
+ const staffSchema = require("../../schemas/staffMember");
+ const noblox = require("noblox.js");
 
     module.exports = async (client, interaction) => {
 
@@ -65,4 +63,3 @@
 
         await modalInteraction.editReply({ content: "Your IN request has been submitted for review! You will be notified soon.", ephemeral: true });
     };
-}
