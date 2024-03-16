@@ -8,7 +8,7 @@ module.exports = async (client, interaction) => {
 
     if (!interaction.isButton()) return;
 
-    const permissions = member.roles.cache.get("1089639862841381025")
+    const permissions = member.roles.cache.get("1089491380503588864")
 
 
     if (!["close", "open", "delete", "transcript"].includes(customId)) return;

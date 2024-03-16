@@ -18,6 +18,12 @@ module.exports = {
             description: "the user to demote",
             type: ApplicationCommandOptionType.String,
             required: true
+        },
+        {
+            name: "reason",
+            description: "the reason for the demotion",
+            type: ApplicationCommandOptionType.String,
+            required: false
         }
     ],
 
@@ -31,6 +37,7 @@ module.exports = {
 
 
         const username = interaction.options.getString("username")
+        let reason = interaction.options.getString("reason") || "No reason given"
         
         const runnerUser = await getRobloxUser(runnerid)
 
@@ -103,6 +110,7 @@ module.exports = {
                 {name: "Username", value: username},
                 {name: "Old rank", value: currentRank},
                 {name: "New rank", value: newRank},
+                {name: "Reason", value: reason},
                 {name: "Responsible user", value: runnerUser}
             )
             

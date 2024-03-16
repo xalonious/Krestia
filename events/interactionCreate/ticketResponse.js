@@ -28,7 +28,7 @@ module.exports = async (client, interaction) => {
             permissionOverwrites: [
                 { id: "1074154728545583174", deny: [PermissionsBitField.Flags.ViewChannel] },
                 { id: member.id, allow: [PermissionsBitField.Flags.ViewChannel, PermissionsBitField.Flags.EmbedLinks] },
-                { id: "1089639862841381025", allow: [PermissionsBitField.Flags.ViewChannel]}
+                { id: "1089491380503588864", allow: [PermissionsBitField.Flags.ViewChannel]}
             ],
         })
         .then(async (channel) => {
@@ -59,7 +59,7 @@ module.exports = async (client, interaction) => {
             );
 
             channel.send({
-                content: "<@&1089639862841381025>",
+                content: "<@&1089491380503588864>",
                 embeds: [ticketEmbed],
                 components: [ticketButtons1, ticketButtons2],
             });
