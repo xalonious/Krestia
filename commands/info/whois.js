@@ -1,6 +1,5 @@
 const { EmbedBuilder, ApplicationCommandOptionType } = require("discord.js")
 const noblox = require("noblox.js")
-const getUserAvatar = require("../../utils/getUserAvatar")
 require("dotenv").config()
 
 
@@ -29,7 +28,8 @@ module.exports = {
             })
         }
 
-        const avatarImage = await getUserAvatar(userId)
+        const userAvatar = await noblox.getPlayerThumbnail(userId, 420, "png", false)
+        const avatarImage = userAvatar[0].imageUrl
         
 
         const groupRank = await noblox.getRankNameInGroup(process.env.GROUP, userId)

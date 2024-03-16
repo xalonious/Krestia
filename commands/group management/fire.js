@@ -1,7 +1,6 @@
 require("dotenv").config()
 const noblox = require("noblox.js")
 const group = process.env.GROUP
-const getUserAvatar = require("../../utils/getUserAvatar")
 const checkAllowance = require("../../utils/checkAllowance")
 const getRobloxUser = require("../../utils/getRobloxUser")
 const { EmbedBuilder, ApplicationCommandOptionType } = require("discord.js")
@@ -79,7 +78,8 @@ module.exports = {
               return console.log(error)
              }
 
-         const embedimage = await getUserAvatar(userId)
+         const userAvatar = await noblox.getPlayerThumbnail(robloxuserID, 420, "png", false)
+         const embedimage = userAvatar[0].imageUrl
 
          let reason = interaction.options.getString("reason")
          if(!reason) reason = "No reason given"

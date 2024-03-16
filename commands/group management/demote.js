@@ -2,7 +2,6 @@ const { ApplicationCommandOptionType, EmbedBuilder } = require("discord.js");
 const noblox = require("noblox.js")
 require("dotenv").config()
 const group = process.env.GROUP
-const getUserAvatar = require("../../utils/getUserAvatar")
 const extractRankName = require("../../utils/extractRankName")
 const checkAllowance = require("../../utils/checkAllowance")
 const getRobloxUser = require("../../utils/getRobloxUser")
@@ -101,8 +100,9 @@ module.exports = {
 
             let newRank = await noblox.getRankNameInGroup(group, userId)
 
-            const embedimage = await getUserAvatar(userId)
-
+            const userAvatar = await noblox.getPlayerThumbnail(userId, 420, "png", false)
+            const embedimage = userAvatar[0].imageUrl
+            
             let logging = new EmbedBuilder()
             .setTitle("User demoted")
             .setDescription("Someone was demoted in the group")

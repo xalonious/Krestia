@@ -2,7 +2,6 @@ const { ApplicationCommandOptionType, EmbedBuilder } = require("discord.js");
 require("dotenv").config()
 const noblox = require("noblox.js")
 const group = process.env.GROUP
-const getUserAvatar = require("../../utils/getUserAvatar")
 const checkAllowance = require("../../utils/checkAllowance")
 const getRobloxUser = require("../../utils/getRobloxUser")
 
@@ -116,7 +115,8 @@ module.exports = {
              }
 
 
-            const embedimage = await getUserAvatar(userId)
+            const userAvatar = await noblox.getPlayerThumbnail(userId, 420, "png", false)
+            const embedimage = userAvatar[0].imageUrl
 
             let exileReason = interaction.options.getString("reason")
             if(!exileReason) exileReason = "No reason given"
