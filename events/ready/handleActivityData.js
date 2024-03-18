@@ -17,7 +17,7 @@ module.exports = async (client) => {
     const activityChan = client.channels.cache.get("1215763529756315700");
     const allStaff = await staffSchema.find({});
 
-    const guild = client.guilds.cache.get("959751115640029224");
+    const guild = client.guilds.cache.get("1074154728545583174");
     const inactivityRole = "1178013745163800668";
 
     const lowActivityUsers = allStaff.filter(user => user.messages < 50);
