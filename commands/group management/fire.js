@@ -78,7 +78,7 @@ module.exports = {
               return console.log(error)
              }
 
-         const userAvatar = await noblox.getPlayerThumbnail(robloxuserID, 420, "png", false)
+         const userAvatar = await noblox.getPlayerThumbnail(userId, 420, "png", false)
          const embedimage = userAvatar[0].imageUrl
 
          let reason = interaction.options.getString("reason")
