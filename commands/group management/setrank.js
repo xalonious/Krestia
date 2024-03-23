@@ -2,7 +2,6 @@ const noblox = require("noblox.js")
 const { ApplicationCommandOptionType } = require("discord.js")
 require("dotenv").config()
 const group = process.env.GROUP
-
 const extractRankName = require("../../utils/extractRankName")
 const checkAllowance = require("../../utils/checkAllowance")
 const getRobloxUser = require("../../utils/getRobloxUser")
