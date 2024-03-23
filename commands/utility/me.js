@@ -2,6 +2,7 @@ const staffSchema = require("../../schemas/staffMember")
 const { EmbedBuilder } = require("discord.js")
 const noblox = require("noblox.js")
 require("dotenv").config()
+const getUserAvatar = require("../../utils/getUserAvatar")
 
 module.exports = {
     name: "me",
@@ -43,8 +44,8 @@ module.exports = {
 
         staffEmbed.setColor("Blurple")
         const robloxuserID = await noblox.getIdFromUsername(staffData.robloxuser)
-        const userAvatar = await noblox.getPlayerThumbnail(robloxuserID, 420, "png", false)
-        staffEmbed.setThumbnail(userAvatar[0].imageUrl)
+        const userAvatar = await getUserAvatar(robloxuserID)
+        staffEmbed.setThumbnail(userAvatar)
         
 
         await interaction.editReply({ embeds: [staffEmbed] })
