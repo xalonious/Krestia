@@ -1,10 +1,15 @@
 const noblox = require("noblox.js")
+const { ApplicationCommandOptionType } = require("discord.js")
 require("dotenv").config()
 const group = process.env.GROUP
+
 const extractRankName = require("../../utils/extractRankName")
 const checkAllowance = require("../../utils/checkAllowance")
 const getRobloxUser = require("../../utils/getRobloxUser")
-const { EmbedBuilder, ApplicationCommandOptionType } = require("discord.js")
+const sendLog = require("../../utils/sendLog")
+const getUserAvatar = require("../../utils/getUserAvatar")
+
+
 
 
 const rankChoices = [
@@ -122,23 +127,20 @@ module.exports = {
 
          let newRank = await noblox.getRankNameInGroup(group, userId)
 
-         const userAvatar = await noblox.getPlayerThumbnail(userId, 420, "png", false)
-         const embedimage = userAvatar[0].imageUrl
+         const embedimage = await getUserAvatar(userId)
 
-         let logging = new EmbedBuilder()
-         .setTitle("User rank updated")
-         .setDescription("Someone's rank was updated in the group")
-         .addFields(
-            {name: "Username", value: username},
-            {name: "Old rank", value: currentRank},
-            {name: "New rank", value: newRank},
-            {name: "Responsible user", value: runnerUser}
-         )
-         .setColor("Blue")
-         .setThumbnail(embedimage)
-
-         const logschan = interaction.guild.channels.cache.get(process.env.LOGSCHAN) 
-
-         logschan.send({ embeds: [logging]})
+            sendLog(
+                client,
+                "User rank updated",
+                "Someone's rank was updated in the group",
+                [
+                    {name: "Username", value: username},
+                    {name: "Old rank", value: currentRank},
+                    {name: "New rank", value: newRank},
+                    {name: "Responsible user", value: runnerUser}
+                ],
+                "Blue",
+                embedimage
+            )
     }
 }

@@ -1,4 +1,5 @@
 const { EmbedBuilder, ApplicationCommandOptionType, PermissionsBitField } = require("discord.js");
+const sendLog = require("../../utils/sendLog");
 require("dotenv").config();
 
 module.exports = {
@@ -39,19 +40,19 @@ module.exports = {
         if (targetId) {
             try {
                 await interaction.guild.bans.create(targetId, { reason: reason });
-                const logEmbed = new EmbedBuilder()
-                    .setTitle("User banned")
-                    .setDescription("Someone was banned from the server")
-                    .addFields(
-                        { name: "User ID", value: `${targetId}` },
+
+                sendLog(
+                    client,
+                    "User banned",
+                    "Someone was banned from the server",
+                    [
+                        { name: "User ID", value: targetId },
                         { name: "Reason", value: reason },
-                        { name: "Responsible moderator", value: `${interaction.member}` }
-                    )
-                    .setColor("Red")
-
-                const logschan = interaction.guild.channels.cache.get(process.env.LOGSCHAN);
-
-                logschan.send({ embeds: [logEmbed] });
+                        { name: "Responsible moderator", value: interaction.member }
+                    ],
+                    "Red",
+                    target.user.displayAvatarURL()
+                )
 
                 return interaction.editReply(`Successfully banned user with ID ${targetId}`);
             } catch (error) {
@@ -67,7 +68,7 @@ module.exports = {
             });
         }
 
-        const bannedloser = new EmbedBuilder()
+            const bannedloser = new EmbedBuilder()
             .setTitle(`You were banned from ${interaction.guild.name}`)
             .addFields(
                 { name: "Ban reason", value: reason },
@@ -92,7 +93,7 @@ module.exports = {
 
 
 
-            const logEmbed = new EmbedBuilder()
+            /*const logEmbed = new EmbedBuilder()
                     .setTitle("User banned")
                     .setDescription("Someone was banned from the server")
                     .addFields(
@@ -105,7 +106,20 @@ module.exports = {
 
                 const logschan = interaction.guild.channels.cache.get(process.env.LOGSCHAN);
 
-                logschan.send({ embeds: [logEmbed] });
+                logschan.send({ embeds: [logEmbed] });*/
+
+                sendLog(
+                    client,
+                    "User banned",
+                    "Someone was banned from the server",
+                    [
+                        { name: "User", value: target },
+                        { name: "Reason", value: reason },
+                        { name: "Responsible moderator", value: interaction.member }
+                    ],
+                    "Red",
+                    target.user.displayAvatarURL()
+                )
 
 
         }, 1000);

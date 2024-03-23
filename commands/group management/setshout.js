@@ -1,8 +1,9 @@
-const { ApplicationCommandOptionType, EmbedBuilder } = require("discord.js")
+const { ApplicationCommandOptionType } = require("discord.js")
 const getRobloxUser = require("../../utils/getRobloxUser")
 const noblox = require("noblox.js")
 require("dotenv").config()
 const group = process.env.GROUP
+const sendLog = require("../../utils/sendLog")
 
 
 module.exports = {
@@ -32,17 +33,17 @@ module.exports = {
 
         interaction.editReply("Succesfully set the group shout!")
 
-        const logEmbed = new EmbedBuilder()
-        .setTitle("Group shout updated")
-        .setDescription("The group shout has been updated")
-        .addFields(
+
+        sendLog(
+          client,
+          "Group shout updated",
+          "The group shout has been updated",
+          [
             {name: "New shout", value: shout},
             {name: "Responsible user", value: runnerUser}
+          ],
+          "Blue",
+          interaction.guild.iconURL()
         )
-        .setColor("Blue")
-        .setThumbnail(interaction.guild.iconURL())
-
-        const logschan = interaction.guild.channels.cache.get(process.env.LOGSCHAN) 
-        logschan.send({ embeds: [logEmbed]})
     }
 }

@@ -1,4 +1,5 @@
 const { ApplicationCommandOptionType, PermissionsBitField, EmbedBuilder } = require("discord.js");
+const sendLog = require("../../utils/sendLog");
 require("dotenv").config()
 
 module.exports = {
@@ -22,7 +23,7 @@ module.exports = {
             await interaction.guild.members.unban(tar);
             const user = await client.users.fetch(tar);
 
-            const logEmbed = new EmbedBuilder()
+            /*const logEmbed = new EmbedBuilder()
                 .setTitle('User unbanned')
                 .setDescription('Someone was unbanned from the server')
                 .addFields(
@@ -32,7 +33,19 @@ module.exports = {
                 .setColor('Green');
 
             const logschan = interaction.guild.channels.cache.get(process.env.LOGSCHAN);
-            logschan.send({ embeds: [logEmbed] });
+            logschan.send({ embeds: [logEmbed] });*/
+
+            sendLog(
+                client,
+                "User unbanned",
+                "Someone was unbanned from the server",
+                [
+                    { name: "User ID", value: tar },
+                    { name: "Responsible moderator", value: interaction.member }
+                ],
+                "Green",
+                user.displayAvatarURL()
+            )
 
             return interaction.reply(`Successfully unbanned user ${user.tag}`);
         } catch(error) {

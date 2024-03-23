@@ -1,4 +1,5 @@
 const { ApplicationCommandOptionType, PermissionsBitField, EmbedBuilder } = require("discord.js");
+const sendLog = require("../../utils/sendLog");
 const ms = require("ms")
 require("dotenv").config()
 module.exports = {
@@ -71,7 +72,7 @@ module.exports = {
               })
         }
 
-        const logEmbed = new EmbedBuilder()
+        /*const logEmbed = new EmbedBuilder()
         .setTitle("User timed out")
         .setDescription("Someone was timed out in the server")
         .addFields(
@@ -84,7 +85,20 @@ module.exports = {
 
         const logschan = interaction.guild.channels.cache.get(process.env.LOGSCHAN) 
 
-        logschan.send({ embeds: [logEmbed]})
+        logschan.send({ embeds: [logEmbed]})*/
+
+        sendLog(
+            client,
+            "User timed out",
+            "Someone was timed out in the server",
+            [
+                {name: "User", value: mentionable},
+                {name: "Reason", value: reason},
+                {name: "Responsible moderator", value: interaction.member}
+            ],
+            "Red",
+            mentionable.user.displayAvatarURL()
+        )
 
     }
 }

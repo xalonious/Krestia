@@ -1,9 +1,11 @@
 require("dotenv").config()
+const { ApplicationCommandOptionType } = require("discord.js")
 const noblox = require("noblox.js")
 const group = process.env.GROUP
 const checkAllowance = require("../../utils/checkAllowance")
 const getRobloxUser = require("../../utils/getRobloxUser")
-const { EmbedBuilder, ApplicationCommandOptionType } = require("discord.js")
+const sendLog = require("../../utils/sendLog")
+const getUserAvatar = require("../../utils/getUserAvatar")
 
 module.exports = {
    name: "fire",
@@ -78,25 +80,23 @@ module.exports = {
               return console.log(error)
              }
 
-         const userAvatar = await noblox.getPlayerThumbnail(userId, 420, "png", false)
-         const embedimage = userAvatar[0].imageUrl
+         const embedimage = await getUserAvatar(userId)
 
          let reason = interaction.options.getString("reason")
          if(!reason) reason = "No reason given"
 
-         let logging = new EmbedBuilder()
-         .setTitle("User fired")
-         .setDescription("Someone was fired from the staff team")
-         .addFields(
-            {name: "Username", value: username},
-            {name: "Reason", value: reason},
-            {name: "Responsible user", value: runnerUser}
-         )
-         .setColor("Red")
-         .setThumbnail(embedimage)
 
-         const logschan = interaction.guild.channels.cache.get(process.env.LOGSCHAN) 
-
-         logschan.send({embeds: [logging]})
+            sendLog(
+                client,
+                "User fired",
+                "Someone was fired from the staff team",
+                [
+                    {name: "Username", value: username},
+                    {name: "Reason", value: reason},
+                    {name: "Responsible user", value: runnerUser}
+                ],
+                "Red",
+                embedimage
+            )
     }
 }

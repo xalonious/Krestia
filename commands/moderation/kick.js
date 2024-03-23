@@ -1,4 +1,5 @@
 const { EmbedBuilder, ApplicationCommandOptionType, PermissionsBitField } = require("discord.js")
+const sendLog = require("../../utils/sendLog")
 require("dotenv").config()
 module.exports = {
  name: "kick",
@@ -59,20 +60,18 @@ module.exports = {
               }, 1000)
                 
 
-            const logEmbed = new EmbedBuilder()
-            .setTitle("User kicked")
-            .setDescription("Someone was kicked from the server")
-            .addFields(
-                {name: "User", value: `${target}`},
-                {name: "Reason", value: reason},
-                {name: "Responsible moderator", value: `${interaction.member}`}
+            sendLog(
+                client,
+                "User kicked",
+                "Someone was kicked from the server",
+                [
+                    {name: "User", value: target},
+                    {name: "Reason", value: reason},
+                    {name: "Responsible moderator", value: interaction.member}
+                ],
+                "Red",
+                target.user.displayAvatarURL()
             )
-            .setColor("Red")
-            .setThumbnail(target.user.displayAvatarURL())
-
-            const logschan = interaction.guild.channels.cache.get(process.env.LOGSCHAN) 
-
-            logschan.send({ embeds: [logEmbed]})
       
 
     }}
