@@ -1,6 +1,7 @@
  const { ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder } = require("discord.js");
  const staffSchema = require("../../schemas/staffMember");
  const noblox = require("noblox.js");
+ const getUserAvatar = require("../../utils/getUserAvatar");
 
     module.exports = async (client, interaction) => {
 
@@ -38,8 +39,7 @@
         const staffMember = await staffSchema.findOne({ userid: interaction.user.id });
         const robloxuser = staffMember.robloxuser;
         const userId = await noblox.getIdFromUsername(robloxuser);
-        const userAvatar = await noblox.getPlayerThumbnail(userId, 420, "png", false)
-        const avatar = userAvatar[0].imageUrl;
+        const avatar = await getUserAvatar(userId);
 
         const inEmbed = new EmbedBuilder()
             .setTitle("Inactivity Request")
