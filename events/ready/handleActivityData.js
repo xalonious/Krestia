@@ -14,7 +14,7 @@ module.exports = async (client) => {
   });
 
   async function handleActivityData() {
-    const activityChan = client.channels.cache.get("1215763529756315700");
+    const activityChan = client.channels.cache.get("1100846300309770432");
     const allStaff = await staffSchema.find({});
 
     const guild = client.guilds.cache.get("1074154728545583174");
