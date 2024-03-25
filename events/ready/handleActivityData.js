@@ -99,7 +99,7 @@ module.exports = async (client) => {
       .setDescription(`${lowActivityUsers.length ? `The following staff members have failed this week's message requirements:\n\n${lowActivityUsers.map(user => `<@${user.userid}>`).join("\n")}` : "No one"}`)
       .setColor("#ff0000");
 
-    const inactivityUsers = allStaff.filter(user => user.isOnInactivity);
+    const inactivityUsers = allStaff.filter(user => user.inactivity.isOnInactivity);
     const inactivityEmbed = new EmbedBuilder()
       .setTitle("Users currently on inactivity")
       .setDescription(`${inactivityUsers.map(user => `<@${user.userid}>`).join("\n") || "None"}`)
