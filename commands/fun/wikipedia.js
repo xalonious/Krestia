@@ -14,9 +14,9 @@ module.exports = {
   ],
 
   run: async (client, interaction) => {
-      
-   await interaction.deferReply();   
-   
+
+   await interaction.deferReply();
+
     const query = interaction.options.getString("query");
 
     try {
@@ -24,14 +24,9 @@ module.exports = {
         `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(query)}`
       );
 
+
       const body = response.data;
 
-      if (body.title && body.title === "Not found.") {
-        return interaction.editReply({
-          content: "Failed to find page with given query",
-          ephemeral: true,
-        });
-      }
 
       const embed = new EmbedBuilder()
         .setTitle(`🌐 ${body.title}`)
@@ -49,10 +44,18 @@ module.exports = {
 
       interaction.editReply({ embeds: [embed] });
     } catch (error) {
-      interaction.editReply({
-        content: "An error occurred while fetching data from Wikipedia",
-        ephemeral: true,
-      });
+      if (error.response.status === 404) {
+    return interaction.editReply({
+        content: "No results found for that query, try something else",
+    });
+} else {
+    interaction.editReply({
+        content: "An error occurred while fetching the data",
+    });
+    console.log(error)
+}
+
+
     }
   },
 };
