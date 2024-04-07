@@ -1,3 +1,4 @@
+const { EmbedBuilder } = require("discord.js");
 const devs = ["531479392128598027"];
 const getLocalCommands = require("../../utils/getLocalCommands");
 const staffDB = require("../../schemas/staffMember");
