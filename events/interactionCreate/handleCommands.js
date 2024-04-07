@@ -28,9 +28,31 @@ module.exports = async (client, interaction) => {
     try {
         await commandObject.run(client, interaction);
     } catch (error) {
+
+        const errChannelID = '1226530851131621468';
+          const channel = client.channels.cache.get(errChannelID);   
+        
+
+          const embed = new EmbedBuilder()
+          .setColor('#FF0000')
+          .setTimestamp()
+          .setFooter({ text: 'Error Reported At' })
+          .setTitle('Command Execution Error')
+          .setDescription('An error occurred while executing a command.')
+          .addFields(
+            { name: '> •   Command', value: `\`\`\`${interaction.commandName}\`\`\`` },
+            { name: '> •   Triggered By', value: `\`\`\`${interaction.user.username}#${interaction.user.discriminator}\`\`\`` },
+            { name: '> •   Error Stack', value: `\`\`\`${error.stack}\`\`\`` },
+            { name: '> •   Error Message', value: `\`\`\`${error.message}\`\`\`` }
+          );
+
+          channel.send({ embeds: [embed] })
+
+
+
         if(interaction.replied || interaction.deferred) {
-            interaction.followUp(`There was an error while running this command: ${error}. Check the console for more details.`);
-        } else interaction.reply(`There was an error while running this command: ${error}. Check the console for more details.`);
+            interaction.followUp(`There was an error while running this command. An error report has been sent to the log channel.`);
+        } else interaction.reply(`There was an error while running this command. An error report has been sent to the log channel.`);
         
         console.log(error);
     }

@@ -6,7 +6,8 @@ module.exports = (client, message) => {
 
     const logsChannel = message.guild.channels.cache.get("1074168201560195082");
 
-    let deletedContent = new EmbedBuilder()
+    try {
+        let deletedContent = new EmbedBuilder()
         .setTitle("Deleted Message")
         .addFields(
             { name: "Author", value: `${message.author}` },
@@ -23,6 +24,10 @@ module.exports = (client, message) => {
     }
 
      logsChannel.send({ embeds: [deletedContent] });
+    } catch(e) {
+        return;
+    }
+
 };
 
 

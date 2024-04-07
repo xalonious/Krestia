@@ -21,6 +21,6 @@ module.exports = async (client, oldMessage, newMessage) => {
 
     await logsChannel.send({ embeds: [editedContent] });
   } catch (error) {
-    console.log(`Error on message update event: ${error}`);
+    return;
   }
 };
