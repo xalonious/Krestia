@@ -30,6 +30,8 @@ module.exports = async (client, interaction) => {
         await commandObject.run(client, interaction);
     } catch (error) {
 
+        if(error.message === 'Unknown interaction') return;
+
         const errChannelID = '1226530851131621468';
           const channel = client.channels.cache.get(errChannelID);   
         
