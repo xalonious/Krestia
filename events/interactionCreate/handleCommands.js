@@ -42,7 +42,7 @@ module.exports = async (client, interaction) => {
           .setDescription('An error occurred while executing a command.')
           .addFields(
             { name: '> •   Command', value: `\`\`\`${interaction.commandName}\`\`\`` },
-            { name: '> •   Triggered By', value: `\`\`\`${interaction.user.username}#${interaction.user.discriminator}\`\`\`` },
+            { name: '> •   Triggered By', value: `\`\`\`${interaction.user.username}\`\`\`` },
             { name: '> •   Error Stack', value: `\`\`\`${error.stack}\`\`\`` },
             { name: '> •   Error Message', value: `\`\`\`${error.message}\`\`\`` }
           );
@@ -55,6 +55,5 @@ module.exports = async (client, interaction) => {
             interaction.followUp(`There was an error while running this command. An error report has been sent to the log channel.`);
         } else interaction.reply(`There was an error while running this command. An error report has been sent to the log channel.`);
         
-        console.log(error);
     }
 };
