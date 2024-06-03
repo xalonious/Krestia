@@ -20,7 +20,7 @@ module.exports = async (client) => {
     const guild = client.guilds.cache.get("1074154728545583174");
     const inactivityRole = "1100853944353300500";
 
-    const lowActivityUsers = allStaff.filter(user => user.messages < 50);
+    const lowActivityUsers = allStaff.filter(user => user.messages < 35);
     const strikedUsers = [];
 
     for (const user of lowActivityUsers) {
@@ -36,7 +36,7 @@ module.exports = async (client) => {
         const strike = {
           strikeId: strikeId,
           amount: (user.strikes?.length ?? 0) + 1,
-          reason: "Failed to meet 50 weekly messages requirement",
+          reason: "Failed to meet 35 weekly messages requirement",
         };
         await staffSchema.updateOne({ userid: user.userid }, { $push: { strikes: strike } });
         const userToNotify = await client.users.fetch(user.userid);
