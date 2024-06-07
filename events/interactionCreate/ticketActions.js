@@ -1,5 +1,5 @@
 const ticketSchema = require("../../schemas/Ticket")
-const { PermissionsBitField, EmbedBuilder } = require("discord.js")
+const { PermissionsBitField, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js")
 const { createTranscript } = require("discord-html-transcripts")
 
 
@@ -11,7 +11,7 @@ module.exports = async (client, interaction) => {
     const permissions = member.roles.cache.get("1089491380503588864")
 
 
-    if (!["close", "open", "delete", "transcript"].includes(customId)) return;
+    if (!["claim", "close", "open", "delete", "transcript"].includes(customId)) return;
 
     try {
         const data = await ticketSchema.findOne({ ChannelID: channel.id });
@@ -26,6 +26,29 @@ module.exports = async (client, interaction) => {
         if(!permissions) return await interaction.reply({content: "You do not have permission to do that.", ephemeral: true});
 
         switch (customId) {
+            case "claim":
+                const mainButtons = new ActionRowBuilder()
+                .addComponents(
+                    new ButtonBuilder().setCustomId("close").setLabel("Close Ticket").setStyle(ButtonStyle.Primary).setEmoji("🔒"),
+                    new ButtonBuilder().setCustomId("open").setLabel("Open Ticket").setStyle(ButtonStyle.Success).setEmoji("🔓"),
+                    new ButtonBuilder().setCustomId("delete").setLabel("Delete Ticket").setStyle(ButtonStyle.Danger).setEmoji("🗑️"),
+                    new ButtonBuilder().setCustomId("transcript").setLabel("Save Transcript").setStyle(ButtonStyle.Secondary).setEmoji("📑")
+                );
+
+                const permissionsOverwrites = [
+                    { id: "1074154728545583174", deny: [PermissionsBitField.Flags.ViewChannel] },
+                    { id: member.id, allow: [PermissionsBitField.Flags.ViewChannel, PermissionsBitField.Flags.SendMessages], },
+                    { id: "1089491380503588864", allow: [PermissionsBitField.Flags.ViewChannel], deny: [PermissionsBitField.Flags.SendMessages] },
+                    { id: ticketOwner.id, allow: [PermissionsBitField.Flags.ViewChannel, PermissionsBitField.Flags.SendMessages]}
+                ];
+    
+
+                await channel.permissionOverwrites.set(permissionsOverwrites);
+
+            await interaction.update({ components: [mainButtons] });
+            await channel.setName(`claimed-${ticketOwner.user.username}`);
+            await interaction.followUp({ content: `Your ticket will be handled by ${member}.`});
+            break;
             case "delete":
                 await interaction.reply("Ticket will be deleted in 5 seconds...");
                 setTimeout(async () => {
