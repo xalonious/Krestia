@@ -31,9 +31,12 @@ module.exports = async (client, interaction) => {
                 .addComponents(
                     new ButtonBuilder().setCustomId("close").setLabel("Close Ticket").setStyle(ButtonStyle.Primary).setEmoji("🔒"),
                     new ButtonBuilder().setCustomId("open").setLabel("Open Ticket").setStyle(ButtonStyle.Success).setEmoji("🔓"),
+                );
+
+                const mainButtons2 = new ActionRowBuilder().setComponents(
                     new ButtonBuilder().setCustomId("delete").setLabel("Delete Ticket").setStyle(ButtonStyle.Danger).setEmoji("🗑️"),
                     new ButtonBuilder().setCustomId("transcript").setLabel("Save Transcript").setStyle(ButtonStyle.Secondary).setEmoji("📑")
-                );
+                )
 
                 const permissionsOverwrites = [
                     { id: "1074154728545583174", deny: [PermissionsBitField.Flags.ViewChannel] },
@@ -45,7 +48,7 @@ module.exports = async (client, interaction) => {
 
                 await channel.permissionOverwrites.set(permissionsOverwrites);
 
-            await interaction.update({ components: [mainButtons] });
+            await interaction.update({ components: [mainButtons, mainButtons2] });
             await channel.setName(`claimed-${ticketOwner.user.username}`);
             await interaction.followUp({ content: `Your ticket will be handled by ${member}.`});
             break;
