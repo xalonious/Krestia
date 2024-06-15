@@ -113,7 +113,32 @@ module.exports = async (client, interaction) => {
         }
     } catch (err) {
         if (err.message === "Unknown Member") {
-            await interaction.reply("Ticket owner has left the server. Deleting ticket in 5 seconds...");
+            await interaction.reply("Ticket owner has left the server. Creating transcript & deleting ticket in 5 seconds...");
+
+            const transcriptChannel = guild.channels.cache.get("1081320013836865616");
+
+            const transcript = await createTranscript(channel, {
+                filename: `ticket-${data.TicketID}.html`,
+            });
+
+            const transcriptEmbed = new EmbedBuilder()
+                .setTitle(`Transcript for ticket #${data.TicketID}`)
+                .setColor("Blue")
+                .setAuthor({name: ticketOwner.user.username, iconURL: ticketOwner.displayAvatarURL({ dynamic: true })})
+                .addFields(
+                    { name: "Ticket Owner", value: `${ticketOwner}`, inline: true },
+                    { name: "Ticket Name", value: channel.name, inline: true },
+                    { name: "Ticket ID", value: data.TicketID, inline: true},
+                    { name: "Type", value: data.Type.toUpperCase(), inline: true}
+                )
+                .setThumbnail("https://cdn3.iconfinder.com/data/icons/block/32/ticket-512.png")
+                .setFooter({text: "Krestia Ticket System", iconURL: `${guild.iconURL()}`})
+
+            await transcriptChannel.send({
+                embeds: [transcriptEmbed],
+                files: [transcript]
+            });
+            
             setTimeout(async () => {
                 await channel.delete();
             }, 5000);
