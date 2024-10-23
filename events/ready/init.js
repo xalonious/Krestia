@@ -13,5 +13,5 @@ module.exports = async (client) => {
     await mongoose.connect(process.env.MONGOURL);
     console.log("✅ | Connected to DB")
 
-    noblox.setCookie(process.env.COOKIE).then((user) => console.log(`✅ | Logged in as ${user.UserName}`))
+    noblox.setCookie(process.env.COOKIE).then((user) => console.log(`✅ | Logged in as ${user.name}`))
 }
